@@ -1,0 +1,55 @@
+# KLCDS .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# KLCDS runtime data (never commit)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.pid
+*.log
+quarantine/
+canary/
+backups/
+models/*.pkl
+
+# Test artifacts
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node (dashboard)
+node_modules/
+dashboard/dist/
+dashboard/build/
+.env
+.env.local

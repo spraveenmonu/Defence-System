@@ -1,0 +1,298 @@
+# ============================================================================
+# KLCDS Detection Rules — Built-in Rule Set
+# ============================================================================
+# Each rule has:
+#   id:          Unique identifier
+#   name:        Human-readable name
+#   description: What this rule detects
+#   condition:   Expression evaluated by the rule engine
+#   severity:    info | low | medium | high | critical
+#   action:      Response action to take
+#   attack_type: Category for grouping in the dashboard
+#   enabled:     true/false
+#   tags:        Labels for filtering
+# ============================================================================
+
+# ---------------------------------------------------------------------------
+# Ransomware detection
+# ---------------------------------------------------------------------------
+- id: ransomware_mass_rename
+  name: "Mass File Rename — Ransomware Indicator"
+  description: >
+    Detects rapid bulk file renaming, a hallmark of ransomware encrypting files
+    and appending a new extension.
+  condition: "rename_events >= 20 within 10s from same_pid"
+  severity: critical
+  action: suspend_process
+  attack_type: ransomware
+  enabled: true
+  tags: [ransomware, file_ops, critical]
+
+- id: ransomware_high_entropy_write
+  name: "High-Entropy File Writes"
+  description: >
+    Files being overwritten with high Shannon entropy suggest encryption.
+    Legitimate compression also triggers this, so it contributes to a
+    composite score rather than firing alone.
+  condition: "write_entropy >= 7.5 and files_modified >= 5 within 30s"
+  severity: high
+  action: collect_evidence
+  attack_type: ransomware
+  enabled: true
+  tags: [ransomware, entropy]
+
+- id: ransomware_canary_touch
+  name: "Canary File Accessed"
+  description: >
+    A decoy file placed in a monitored directory was read or modified.
+    No legitimate process should ever touch canary files.
+  condition: "canary_file_touched == true"
+  severity: critical
+  action: suspend_process
+  attack_type: ransomware
+  enabled: true
+  tags: [ransomware, canary, high_confidence]
+
+- id: ransomware_backup_tampering
+  name: "Backup Service Tampering"
+  description: >
+    Attempts to stop or disable backup-related services or delete
+    shadow copies.
+  condition: "target_service in backup_services and action in [stop, disable, mask]"
+  severity: critical
+  action: suspend_process
+  attack_type: ransomware
+  enabled: true
+  tags: [ransomware, backup]
+
+- id: ransomware_ransom_note
+  name: "Ransom Note File Created"
+  description: >
+    A file matching common ransom-note naming patterns was created.
+  condition: "created_file matches ransom_note_patterns"
+  severity: high
+  action: collect_evidence
+  attack_type: ransomware
+  enabled: true
+  tags: [ransomware, ioc]
+
+# ---------------------------------------------------------------------------
+# Suspicious execution
+# ---------------------------------------------------------------------------
+- id: suspicious_tmp_execution
+  name: "Execution from /tmp with Network Activity"
+  description: >
+    A binary executed from /tmp, /dev/shm, or a user-writable temporary
+    directory and then made an outbound network connection.
+  condition: "exec_path startswith /tmp and outbound_connection == true"
+  severity: high
+  action: quarantine_process
+  attack_type: malware
+  enabled: true
+  tags: [malware, execution, network]
+
+- id: execution_from_devshm
+  name: "Execution from /dev/shm"
+  description: >
+    /dev/shm is a RAM-backed filesystem often used by attackers to stage
+    payloads because it's world-writable and rarely monitored.
+  condition: "exec_path startswith /dev/shm"
+  severity: high
+  action: quarantine_process
+  attack_type: malware
+  enabled: true
+  tags: [malware, execution]
+
+- id: deleted_binary_running
+  name: "Process Running Deleted Executable"
+  description: >
+    A process's exe link points to a deleted file. This is a common
+    indicator of fileless malware or post-exploitation cleanup.
+  condition: "exe_path endswith (deleted)"
+  severity: high
+  action: collect_evidence
+  attack_type: malware
+  enabled: true
+  tags: [malware, evasion]
+
+- id: download_execute_chain
+  name: "Download-Then-Execute Chain"
+  description: >
+    A process downloaded a file (curl/wget) and then the downloaded file
+    was executed within a short time window.
+  condition: "download_tool_exec followed_by new_exec_from_same_dir within 60s"
+  severity: high
+  action: quarantine_process
+  attack_type: malware
+  enabled: true
+  tags: [malware, dropper, chain]
+
+# ---------------------------------------------------------------------------
+# Brute force / network attacks
+# ---------------------------------------------------------------------------
+- id: ssh_brute_force
+  name: "SSH Brute-Force Attack"
+  description: >
+    Multiple failed SSH authentication attempts from a single source IP
+    within a short window.
+  condition: "failed_ssh_logins >= 10 within 60s from same_ip"
+  severity: high
+  action: block_ip
+  attack_type: brute_force
+  enabled: true
+  tags: [brute_force, ssh, network]
+
+- id: port_scan_detected
+  name: "Port Scan Detected"
+  description: >
+    A single source IP connected to many distinct destination ports in
+    rapid succession — typical of nmap or similar scanners.
+  condition: "distinct_dst_ports >= 20 within 30s from same_src_ip"
+  severity: medium
+  action: collect_evidence
+  attack_type: reconnaissance
+  enabled: true
+  tags: [recon, scan, network]
+
+- id: suspicious_outbound_port
+  name: "Suspicious Outbound Connection"
+  description: >
+    An outbound connection to a port commonly associated with reverse
+    shells, C2 frameworks, or exploitation tools.
+  condition: "dst_port in [4444, 5555, 1337, 31337, 8888, 9999]"
+  severity: high
+  action: collect_evidence
+  attack_type: c2_communication
+  enabled: true
+  tags: [c2, network, exfiltration]
+
+- id: bind_all_interfaces
+  name: "Service Bound to All Interfaces"
+  description: >
+    A service bound to 0.0.0.0, exposing it to the network. This is not
+    necessarily malicious but increases the attack surface.
+  condition: "bind_address == 0.0.0.0 and port not in safe_ports"
+  severity: low
+  action: log
+  attack_type: misconfiguration
+  enabled: true
+  tags: [network, config]
+
+# ---------------------------------------------------------------------------
+# Persistence mechanisms
+# ---------------------------------------------------------------------------
+- id: cron_modification
+  name: "Cron Job Modified"
+  description: >
+    A crontab or cron drop-in file was created or modified. Attackers
+    frequently use cron for persistence.
+  condition: "file_path matches /etc/cron* or /var/spool/cron/*"
+  severity: medium
+  action: collect_evidence
+  attack_type: persistence
+  enabled: true
+  tags: [persistence, cron]
+
+- id: systemd_unit_created
+  name: "New systemd Unit Created"
+  description: >
+    A new systemd service/timer unit was created outside of a package
+    manager transaction.
+  condition: "file_path matches /etc/systemd/system/*.service and source != apt"
+  severity: medium
+  action: collect_evidence
+  attack_type: persistence
+  enabled: true
+  tags: [persistence, systemd]
+
+- id: bashrc_modification
+  name: "Shell RC File Modified"
+  description: >
+    .bashrc, .profile, or similar shell init files were modified, which
+    can be used for persistence or credential harvesting.
+  condition: "file_path matches */.bashrc or */.profile or */.bash_profile"
+  severity: medium
+  action: collect_evidence
+  attack_type: persistence
+  enabled: true
+  tags: [persistence, shell]
+
+# ---------------------------------------------------------------------------
+# Privilege escalation
+# ---------------------------------------------------------------------------
+- id: setuid_call
+  name: "setuid/setgid Syscall"
+  description: >
+    A process called setuid or setgid to change its effective user/group.
+  condition: "syscall in [setuid, setgid] and target_uid == 0"
+  severity: medium
+  action: collect_evidence
+  attack_type: privilege_escalation
+  enabled: true
+  tags: [privesc, syscall]
+
+- id: kernel_module_load
+  name: "Kernel Module Loaded"
+  description: >
+    A kernel module was loaded via init_module or finit_module. Rootkits
+    commonly use loadable kernel modules for stealth.
+  condition: "syscall in [init_module, finit_module]"
+  severity: high
+  action: collect_evidence
+  attack_type: rootkit
+  enabled: true
+  tags: [rootkit, kernel, module]
+
+# ---------------------------------------------------------------------------
+# Evasion / anti-forensics
+# ---------------------------------------------------------------------------
+- id: logging_disabled
+  name: "Logging Service Tampering"
+  description: >
+    An attempt to stop, disable, or mask rsyslog, auditd, or journald —
+    a common anti-forensics technique.
+  condition: "target_service in [rsyslog, auditd, systemd-journald] and action in [stop, disable, mask]"
+  severity: critical
+  action: suspend_process
+  attack_type: evasion
+  enabled: true
+  tags: [evasion, anti_forensics]
+
+- id: security_tool_killed
+  name: "Security Tool Process Killed"
+  description: >
+    A process attempted to kill a known security tool (ClamAV, AIDE,
+    OSSEC, fail2ban, klcds).
+  condition: "kill_target_comm in [clamd, aide, ossec, fail2ban, klcds]"
+  severity: critical
+  action: suspend_process
+  attack_type: evasion
+  enabled: true
+  tags: [evasion, defense_evasion]
+
+# ---------------------------------------------------------------------------
+# File integrity
+# ---------------------------------------------------------------------------
+- id: fim_critical_change
+  name: "Critical File Integrity Change"
+  description: >
+    A file in the integrity-monitoring baseline was modified outside
+    of a known maintenance window or package update.
+  condition: "fim_change == true and file_path in critical_files"
+  severity: high
+  action: collect_evidence
+  attack_type: tampering
+  enabled: true
+  tags: [fim, integrity]
+
+- id: shadow_file_read
+  name: "/etc/shadow Read by Non-Root"
+  description: >
+    A non-root process read /etc/shadow, which may indicate credential
+    harvesting.
+  condition: "file_path == /etc/shadow and syscall == openat and uid != 0"
+  severity: high
+  action: collect_evidence
+  attack_type: credential_access
+  enabled: true
+  tags: [credentials, shadow]

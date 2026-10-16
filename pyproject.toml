@@ -1,0 +1,92 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "klcds"
+version = "0.1.0"
+description = "Kernel-Level Cyber Defense System — defensive host security for Linux"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+authors = [
+    {name = "KLCDS Project"},
+]
+keywords = ["security", "ebpf", "linux", "ids", "defense", "kernel"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: System :: Monitoring",
+]
+
+dependencies = [
+    # Core
+    "pydantic>=2.5",
+    "pyyaml>=6.0",
+    "click>=8.1",
+    # API
+    "fastapi>=0.109",
+    "uvicorn[standard]>=0.27",
+    # Database
+    # sqlite3 is in the stdlib; psycopg2 is optional
+    # Scanning
+    "yara-python>=4.3",
+    # ML
+    "scikit-learn>=1.4",
+    "numpy>=1.26",
+    "joblib>=1.3",
+    # Utilities
+    "rich>=13.7",
+    "httpx>=0.27",
+    "jinja2>=3.1",
+    "python-multipart>=0.0.6",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=4.1",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.2",
+    "mypy>=1.8",
+    "pre-commit>=3.6",
+]
+pg = [
+    "psycopg2-binary>=2.9",
+    "sqlalchemy>=2.0",
+]
+dashboard = [
+    "streamlit>=1.31",
+]
+
+[project.scripts]
+klcds = "klcds.cli.main:main"
+
+[tool.setuptools.packages.find]
+include = ["klcds*"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+select = ["E", "F", "I", "N", "W", "UP", "S", "B", "A", "C4", "SIM"]
+ignore = ["S101", "S603", "S607"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+markers = [
+    "slow: marks tests as slow",
+    "ebpf: requires root and eBPF support",
+]

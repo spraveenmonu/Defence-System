@@ -1,0 +1,180 @@
+# ============================================================================
+# KLCDS — Kernel-Level Cyber Defense System — Configuration
+# ============================================================================
+# Copy this file to /etc/klcds/klcds.yaml for production.
+# For development, keep it in the project root (./klcds.yaml).
+#
+# Every key shown below is at its DEFAULT value.  Uncomment and edit only
+# the values you want to change.
+# ============================================================================
+
+log_level: INFO
+log_file: /var/log/klcds/klcds.log
+pid_file: /var/run/klcds/klcds.pid
+data_dir: /var/lib/klcds
+
+# ---------------------------------------------------------------------------
+# Database
+# ---------------------------------------------------------------------------
+database:
+  engine: sqlite                        # 'sqlite' or 'postgresql'
+  sqlite_path: /var/lib/klcds/klcds.db
+  # PostgreSQL (unused until migration):
+  # pg_host: localhost
+  # pg_port: 5432
+  # pg_user: klcds
+  # pg_password: changeme
+  # pg_database: klcds
+
+# ---------------------------------------------------------------------------
+# eBPF collector
+# ---------------------------------------------------------------------------
+ebpf:
+  ring_buffer_pages: 64                 # 64 pages = 256 KiB ring buffer
+  poll_timeout_ms: 100
+  enabled_probes:
+    - execve
+    - openat
+    - unlink
+    - rename
+    - connect
+    - bind
+    - setuid
+    - setgid
+    - capset
+    - init_module
+    - finit_module
+    - delete_module
+
+# ---------------------------------------------------------------------------
+# Auditd / Journald log consumer
+# ---------------------------------------------------------------------------
+auditd:
+  enabled: true
+  journal_filters:
+    - _TRANSPORT=audit
+    - SYSLOG_IDENTIFIER=sshd
+  ssh_brute_threshold: 10
+  ssh_brute_window_sec: 60
+
+# ---------------------------------------------------------------------------
+# Detection rule engine
+# ---------------------------------------------------------------------------
+rules:
+  rules_dir: /etc/klcds/rules
+  custom_rules_dir: /etc/klcds/rules.d
+
+# ---------------------------------------------------------------------------
+# Ransomware shield
+# ---------------------------------------------------------------------------
+ransomware:
+  canary_dir: /var/lib/klcds/canary
+  canary_count: 10
+  rename_threshold: 20
+  rename_window_sec: 10
+  entropy_threshold: 7.5
+  files_per_sec_threshold: 30
+  dirs_per_min_threshold: 50
+
+# ---------------------------------------------------------------------------
+# File integrity monitoring
+# ---------------------------------------------------------------------------
+fim:
+  baseline_paths:
+    - /etc/passwd
+    - /etc/shadow
+    - /etc/ssh/sshd_config
+    - /etc/crontab
+    - /etc/systemd/system
+    - /etc/sudoers
+  baseline_db: /var/lib/klcds/fim_baseline.json
+  check_interval_sec: 300
+
+# ---------------------------------------------------------------------------
+# Malware / signature scanners
+# ---------------------------------------------------------------------------
+scanner:
+  clamav_socket: /var/run/clamav/clamd.ctl
+  yara_rules_dir: /etc/klcds/yara
+  hash_list_path: /etc/klcds/hash_blocklist.txt
+
+# ---------------------------------------------------------------------------
+# Automated response engine
+# ---------------------------------------------------------------------------
+response:
+  # ⚠️  SAFE MODE (default ON): all actions are LOGGED, never executed.
+  # Set to false AND pass --enforce on the CLI to enable real containment.
+  safe_mode: true
+  quarantine_dir: /var/lib/klcds/quarantine
+  nftables_table: klcds_block
+  nftables_chain: klcds_input
+  backup_dir: /var/lib/klcds/backups
+
+# ---------------------------------------------------------------------------
+# Alert delivery
+# ---------------------------------------------------------------------------
+alerts:
+  desktop_notify: true
+  email_enabled: false
+  # email_smtp_host: smtp.example.com
+  # email_smtp_port: 587
+  # email_from: klcds@example.com
+  # email_to: admin@example.com
+  # email_password: changeme
+  telegram_enabled: false
+  # telegram_bot_token: "123456:ABC-..."
+  # telegram_chat_id: "-100..."
+
+# ---------------------------------------------------------------------------
+# Process / path allowlist
+# ---------------------------------------------------------------------------
+allowlist:
+  entries:
+    - name: systemd
+      exe_path: /usr/lib/systemd/systemd
+      comm: systemd
+      reason: "PID 1 — init system"
+    - name: apt
+      exe_path: /usr/bin/apt
+      comm: apt
+      reason: "Package manager"
+    - name: dpkg
+      exe_path: /usr/bin/dpkg
+      comm: dpkg
+      reason: "Package manager backend"
+    - name: klcds
+      comm: klcds
+      reason: "Never self-destruct"
+  trusted_paths:
+    - /usr/bin
+    - /usr/sbin
+    - /usr/lib
+    - /usr/libexec
+
+# ---------------------------------------------------------------------------
+# FastAPI backend
+# ---------------------------------------------------------------------------
+api:
+  host: 127.0.0.1
+  port: 8443
+  reload: false
+  workers: 2
+  cors_origins:
+    - http://localhost:3000
+
+# ---------------------------------------------------------------------------
+# Dashboard
+# ---------------------------------------------------------------------------
+dashboard:
+  framework: react
+  theme: cyberpunk
+
+# ---------------------------------------------------------------------------
+# ML anomaly detection
+# ---------------------------------------------------------------------------
+ml:
+  enabled: true
+  model_path: /var/lib/klcds/models/isolation_forest.pkl
+  contamination: 0.05
+  retrain_interval_sec: 3600
+  min_samples: 500
