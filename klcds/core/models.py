@@ -326,5 +326,5 @@ def sha256_of_file(path: str | Path, block_size: int = 65536) -> Optional[str]:
             while chunk := f.read(block_size):
                 h.update(chunk)
         return h.hexdigest()
-    except (OSError, PermissionError):
+    except OSError:
         return None

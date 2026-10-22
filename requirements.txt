@@ -3,14 +3,15 @@ pydantic>=2.5
 pyyaml>=6.0
 click>=8.1
 
-# API
+# API & WebSocket Streaming
 fastapi>=0.109
 uvicorn[standard]>=0.27
+websockets>=12.0
 
-# Scanning
-yara-python>=4.3
+# Optional Scanning (uncomment if C compiler available)
+# yara-python>=4.3
 
-# ML
+# ML Anomaly Detection
 scikit-learn>=1.4
 numpy>=1.26
 joblib>=1.3

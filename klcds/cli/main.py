@@ -20,6 +20,19 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
+from typing import Any
+
+# Ensure UTF-8 output on Windows consoles
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+if hasattr(sys.stderr, "reconfigure"):
+    try:
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
 
 import click
 
@@ -107,6 +120,7 @@ def status(ctx: click.Context) -> None:
     """Show KLCDS system status and database summary."""
     cfg = ctx.obj["config"]
     db = Database(cfg)
+    stats: dict[str, Any] = {}
     try:
         db.connect()
         stats = db.get_stats()
@@ -309,6 +323,127 @@ def run(ctx: click.Context, enforce: bool, daemon: bool) -> None:
     click.echo("  • ML detector        → Phase 8")
     click.echo()
     click.echo("Phase 1 complete.  Engine subsystems will be wired in subsequent phases.")
+
+
+# ---------------------------------------------------------------------------
+# sim (Cyber Defense Simulation Engine)
+# ---------------------------------------------------------------------------
+
+@cli.group("sim")
+def sim_group() -> None:
+    """Cyber Defense Simulation commands."""
+    pass
+
+
+@sim_group.command("list")
+def sim_list() -> None:
+    """List all available attack and defense simulation scenarios."""
+    from simulator.scenarios import list_available_scenarios
+    from rich.console import Console
+    from rich.table import Table
+
+    console = Console(legacy_windows=False)
+    scenarios = list_available_scenarios()
+
+    table = Table(title="[bold cyan]KLCDS Cyber Defense Simulations[/bold cyan]", show_header=True, header_style="bold cyan")
+    table.add_column("ID", style="bold yellow", width=14)
+    table.add_column("Scenario Name", style="bold white", width=36)
+    table.add_column("Category", style="cyan", width=18)
+    table.add_column("Severity", width=10)
+    table.add_column("MITRE ATT&CK", style="green", width=32)
+
+    for s in scenarios:
+        sev = s.get("severity", "high").upper()
+        sev_style = "bold red" if sev == "CRITICAL" else ("bold yellow" if sev == "HIGH" else "cyan")
+        mitre = ", ".join([t.split()[0] for t in s.get("mitre_techniques", [])[:2]])
+        table.add_row(
+            s["id"],
+            s["name"],
+            s["category"],
+            f"[{sev_style}]{sev}[/{sev_style}]",
+            mitre,
+        )
+    console.print(table)
+
+
+@sim_group.command("run")
+@click.argument("scenario_id", default="ransomware")
+@click.option("--enforce", is_flag=True, default=False, help="Enable autonomous response enforcement.")
+@click.option("--persist/--no-persist", default=True, help="Save events and alerts to database.")
+@click.pass_context
+def sim_run(ctx: click.Context, scenario_id: str, enforce: bool, persist: bool) -> None:
+    """Execute a cyber attack simulation scenario and observe defense reaction."""
+    from simulator.runner import SimulationRunner
+    from rich.console import Console
+    from rich.panel import Panel
+
+    console = Console(legacy_windows=False)
+    cfg = ctx.obj["config"]
+    db = Database(cfg) if persist else None
+    if db:
+        db.connect()
+        db.initialize()
+
+    runner = SimulationRunner(db=db, safe_mode=not enforce)
+
+    console.print(Panel(
+        f"[bold cyan]Initiating Defense Simulation:[/bold cyan] [bold yellow]{scenario_id}[/bold yellow]\n"
+        f"[dim]Mode: {'🔴 Autonomous Enforcement' if enforce else '🛡️ Safe Mode (Actions Logged Only)'} | "
+        f"Database: {'Persisted' if persist else 'Memory Only'}[/dim]",
+        title="[bold red]⚡ KLCDS SIMULATION ENGINE[/bold red]",
+        border_style="cyan",
+    ))
+
+    try:
+        res = runner.execute_scenario(scenario_id, safe_mode=not enforce)
+    except KeyError as e:
+        console.print(f"[bold red]Error:[/bold red] {e}")
+        return
+
+    console.print(f"[bold green]✔ Scenario Completed in {res.duration_sec:.2f}s[/bold green]")
+    console.print(f"  • Telemetry Events : [cyan]{res.total_events}[/cyan]")
+    console.print(f"  • Defensive Alerts : [red]{res.total_alerts}[/red] ([bold red]{res.critical_alerts} critical[/bold red])")
+    console.print(f"  • Countermeasures  : [yellow]{len(res.actions_taken)}[/yellow]")
+    posture_style = "bold green" if res.posture_after >= 80 else "bold red"
+    console.print(f"  • Posture Shift    : [yellow]{res.posture_before}[/yellow] -> [{posture_style}]{res.posture_after}/100[/{posture_style}]")
+    console.print(f"\n[italic cyan]{res.defense_summary}[/italic cyan]\n")
+
+
+@sim_group.command("reset")
+@click.pass_context
+def sim_reset(ctx: click.Context) -> None:
+    """Reset simulation telemetry and restore baseline posture."""
+    from simulator.runner import SimulationRunner
+    cfg = ctx.obj["config"]
+    db = Database(cfg)
+    db.connect()
+    db.initialize()
+    runner = SimulationRunner(db=db)
+    runner.reset_state()
+    click.echo("🔄 Simulation environment and telemetry database reset to baseline.")
+
+
+# ---------------------------------------------------------------------------
+# web (Command Center Web Server)
+# ---------------------------------------------------------------------------
+
+@cli.command("web")
+@click.option("--host", default="127.0.0.1", help="Host address to bind.")
+@click.option("--port", default=8000, type=int, help="Port to listen on.")
+@click.option("--open-browser/--no-browser", default=True, help="Automatically open browser.")
+def run_web(host: str, port: int, open_browser: bool) -> None:
+    """Launch the Interactive Cyber Defense Command Center web server."""
+    import uvicorn
+    import webbrowser
+    import threading
+
+    url = f"http://{host}:{port}"
+    click.echo(f"🚀 Starting KLCDS Cyber Defense Command Center at {url}")
+
+    if open_browser:
+        threading.Timer(1.2, lambda: webbrowser.open(url)).start()
+
+    uvicorn.run("simulator.api:app", host=host, port=port, log_level="info")
 
 
 # ---------------------------------------------------------------------------

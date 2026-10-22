@@ -1,18 +1,15 @@
-# KLCDS Dashboard
+# KLCDS Simulation Command Center
 
-React-based cyberpunk dashboard with glassmorphism UI (Phase 7).
+The Cyberpunk Glassmorphism Command Center is located at [`index.html`](../index.html) in the project root.
 
-## Setup
+## Running the Command Center
+
+### Method 1: Integrated Simulator Server (Recommended)
+Runs the FastAPI telemetry backend and WebSocket broadcaster with automatic browser launch:
 ```bash
-cd dashboard
-npm install
-npm run dev
+python -m klcds.cli.main web
 ```
+Dashboard will be available at: `http://localhost:8000`
 
-## Features (planned)
-- Real-time event stream with WebSocket
-- Alert management panel
-- Security posture gauge
-- Process tree visualization
-- Incident timeline
-- Report export (HTML/PDF)
+### Method 2: Standalone Mode
+Double-click or open `index.html` directly in any modern web browser. The standalone client engine simulates ambient telemetry, audio FX, and scenario playbacks client-side without any backend prerequisites.

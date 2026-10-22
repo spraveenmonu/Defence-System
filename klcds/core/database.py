@@ -231,16 +231,31 @@ class Database:
     # -- connection management -----------------------------------------------
 
     def _ensure_dir(self) -> None:
-        Path(self._db_path).parent.mkdir(parents=True, exist_ok=True)
+        try:
+            Path(self._db_path).parent.mkdir(parents=True, exist_ok=True)
+        except OSError:
+            fallback = Path("./data/klcds.db")
+            fallback.parent.mkdir(parents=True, exist_ok=True)
+            self._db_path = str(fallback)
 
     def connect(self) -> None:
         """Open (or reopen) the database connection."""
         self._ensure_dir()
-        self._conn = sqlite3.connect(
-            self._db_path,
-            check_same_thread=False,
-            timeout=10,
-        )
+        try:
+            self._conn = sqlite3.connect(
+                self._db_path,
+                check_same_thread=False,
+                timeout=10,
+            )
+        except sqlite3.OperationalError:
+            fallback = Path("./data/klcds.db")
+            fallback.parent.mkdir(parents=True, exist_ok=True)
+            self._db_path = str(fallback)
+            self._conn = sqlite3.connect(
+                self._db_path,
+                check_same_thread=False,
+                timeout=10,
+            )
         self._conn.row_factory = sqlite3.Row
         self._conn.execute("PRAGMA journal_mode = WAL")
         self._conn.execute("PRAGMA foreign_keys = ON")
@@ -388,6 +403,9 @@ class Database:
         sql = f"SELECT * FROM alerts {where} ORDER BY timestamp DESC LIMIT ?"
         params.append(limit)
         return self.query(sql, tuple(params))
+
+    # Alias for API consistency
+    get_recent_alerts = get_alerts
 
     def get_alert_by_id(self, alert_id: str) -> Optional[dict[str, Any]]:
         rows = self.query("SELECT * FROM alerts WHERE alert_id = ?", (alert_id,))

