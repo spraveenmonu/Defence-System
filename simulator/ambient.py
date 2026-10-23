@@ -9,11 +9,25 @@ from __future__ import annotations
 
 import random
 from datetime import datetime, timezone
+from typing import NotRequired, TypedDict
 from uuid import uuid4
 
 from klcds.core.models import KernelEvent, SyscallType
 
-BENIGN_SERVICES = [
+
+class BenignService(TypedDict):
+    comm: str
+    pid: int
+    uid: int
+    syscall: SyscallType
+    cmd: str
+    file: NotRequired[str | None]
+    src_ip: NotRequired[str | None]
+    dst_ip: NotRequired[str | None]
+    dst_port: NotRequired[int | None]
+
+
+BENIGN_SERVICES: list[BenignService] = [
     {
         "comm": "systemd-journal",
         "pid": 290,
@@ -81,10 +95,11 @@ BENIGN_SERVICES = [
 
 def generate_ambient_event() -> KernelEvent:
     """Generate a single benign background event."""
-    sample = random.choice(BENIGN_SERVICES)
+    sample: BenignService = random.choice(BENIGN_SERVICES)
+    dst_port = sample.get("dst_port")
     return KernelEvent(
         event_id=str(uuid4()),
-        timestamp=datetime.now(timezone.utc).isoformat(),
+        timestamp=datetime.now(timezone.utc),
         syscall=sample["syscall"],
         pid=sample["pid"],
         ppid=1,
@@ -96,7 +111,7 @@ def generate_ambient_event() -> KernelEvent:
         file_path=sample.get("file"),
         src_ip=sample.get("src_ip"),
         dst_ip=sample.get("dst_ip"),
-        dst_port=sample.get("dst_port"),
-        protocol="TCP" if sample.get("dst_port") else None,
+        dst_port=dst_port,
+        protocol="TCP" if dst_port else None,
         return_code=0,
     )

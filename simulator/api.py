@@ -9,12 +9,13 @@ from __future__ import annotations
 
 import asyncio
 import json
+from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, AsyncGenerator, Optional
 
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse, Response
 from pydantic import BaseModel
 
 from klcds.core.config import load_config
@@ -23,10 +24,27 @@ from simulator.ambient import generate_ambient_event
 from simulator.runner import SimulationRunner
 from simulator.scenarios import get_scenario, list_available_scenarios
 
+# Global database & simulation runner instances
+_config = load_config()
+_db = Database(_config)
+_runner = SimulationRunner(db=_db, safe_mode=True)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    try:
+        _db.connect()
+        _db.initialize()
+    except Exception as exc:
+        print(f"[!] Warning: Database init fallback: {exc}")
+    yield
+
+
 app = FastAPI(
     title="KLCDS Cyber Defense Simulator API",
     description="Interactive attack/defense scenario simulator with real-time kernel telemetry",
     version="1.0.0",
+    lifespan=lifespan,
 )
 
 app.add_middleware(
@@ -36,20 +54,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Global database & simulation runner instances
-_config = load_config()
-_db = Database(_config)
-_runner = SimulationRunner(db=_db, safe_mode=True)
-
-
-@app.on_event("startup")
-def on_startup() -> None:
-    try:
-        _db.connect()
-        _db.initialize()
-    except Exception as exc:
-        print(f"[!] Warning: Database init fallback: {exc}")
 
 
 # ---------------------------------------------------------------------------
@@ -143,7 +147,7 @@ async def websocket_stream(websocket: WebSocket) -> None:
             "safe_mode": _runner.safe_mode,
         })
 
-        async def ambient_heartbeat():
+        async def ambient_heartbeat() -> None:
             while True:
                 await asyncio.sleep(1.2)
                 ambient_evt = generate_ambient_event()
@@ -202,7 +206,7 @@ async def websocket_stream(websocket: WebSocket) -> None:
 # ---------------------------------------------------------------------------
 
 @app.get("/", response_class=HTMLResponse)
-def serve_dashboard():
+def serve_dashboard() -> Response:
     """Serve the Cyber Defense Command Center dashboard."""
     index_path = Path(__file__).resolve().parent.parent / "index.html"
     if index_path.exists():

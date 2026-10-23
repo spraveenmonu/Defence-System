@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="KLCDS — Kernel-Level Cyber Defense System — Real-time security simulation dashboard">
-    <title>KLCDS — Cyber Defense Command Center</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="description"
+        content="KLCDS — Kernel-Level Cyber Defense System — Real-time security simulation dashboard">
+    <title>Cyber Defense Command Center</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         /* ================================================================
            KLCDS CYBERPUNK GLASSMORPHISM DASHBOARD
            ================================================================ */
-        
+
         :root {
             /* Neon palette */
             --neon-cyan: #00f5ff;
@@ -55,7 +59,9 @@
             --radius-sm: 10px;
         }
 
-        *, *::before, *::after {
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -105,8 +111,15 @@
         }
 
         @keyframes gridPulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+
+            0%,
+            100% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
 
         .scanline {
@@ -123,8 +136,13 @@
         }
 
         @keyframes scanDown {
-            0% { top: -3px; }
-            100% { top: 100%; }
+            0% {
+                top: -3px;
+            }
+
+            100% {
+                top: 100%;
+            }
         }
 
         /* ================================================================
@@ -161,8 +179,15 @@
         }
 
         @keyframes headerGlow {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 1; }
+
+            0%,
+            100% {
+                opacity: 0.4;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
 
         .logo-group {
@@ -188,8 +213,15 @@
         }
 
         @keyframes shieldPulse {
-            0%, 100% { filter: drop-shadow(0 0 6px var(--neon-cyan)); }
-            50% { filter: drop-shadow(0 0 14px var(--neon-cyan)) drop-shadow(0 0 28px rgba(0,245,255,0.3)); }
+
+            0%,
+            100% {
+                filter: drop-shadow(0 0 6px var(--neon-cyan));
+            }
+
+            50% {
+                filter: drop-shadow(0 0 14px var(--neon-cyan)) drop-shadow(0 0 28px rgba(0, 245, 255, 0.3));
+            }
         }
 
         .logo-text {
@@ -235,13 +267,31 @@
             animation: dotBlink 2s ease-in-out infinite;
         }
 
-        .header-stat .stat-dot.green { background: var(--neon-green); box-shadow: 0 0 8px var(--neon-green); }
-        .header-stat .stat-dot.cyan { background: var(--neon-cyan); box-shadow: 0 0 8px var(--neon-cyan); }
-        .header-stat .stat-dot.magenta { background: var(--neon-magenta); box-shadow: 0 0 8px var(--neon-magenta); }
+        .header-stat .stat-dot.green {
+            background: var(--neon-green);
+            box-shadow: 0 0 8px var(--neon-green);
+        }
+
+        .header-stat .stat-dot.cyan {
+            background: var(--neon-cyan);
+            box-shadow: 0 0 8px var(--neon-cyan);
+        }
+
+        .header-stat .stat-dot.magenta {
+            background: var(--neon-magenta);
+            box-shadow: 0 0 8px var(--neon-magenta);
+        }
 
         @keyframes dotBlink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
         }
 
         .header-stat .stat-value {
@@ -280,8 +330,15 @@
         }
 
         @keyframes enforcePulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 23, 68, 0.1), inset 0 0 20px rgba(255, 23, 68, 0.05); }
-            50% { box-shadow: 0 0 30px rgba(255, 23, 68, 0.25), inset 0 0 30px rgba(255, 23, 68, 0.1); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(255, 23, 68, 0.1), inset 0 0 20px rgba(255, 23, 68, 0.05);
+            }
+
+            50% {
+                box-shadow: 0 0 30px rgba(255, 23, 68, 0.25), inset 0 0 30px rgba(255, 23, 68, 0.1);
+            }
         }
 
         .safe-mode-indicator {
@@ -337,13 +394,16 @@
         .sidebar::-webkit-scrollbar {
             width: 4px;
         }
+
         .sidebar::-webkit-scrollbar-track {
             background: transparent;
         }
+
         .sidebar::-webkit-scrollbar-thumb {
             background: rgba(0, 245, 255, 0.2);
             border-radius: 4px;
         }
+
         .sidebar::-webkit-scrollbar-thumb:hover {
             background: var(--neon-cyan);
         }
@@ -628,7 +688,8 @@
         }
 
         /* Panel target highlight glow */
-        .glass-panel, .stats-row {
+        .glass-panel,
+        .stats-row {
             scroll-margin-top: calc(var(--header-height) + 18px);
         }
 
@@ -641,11 +702,13 @@
                 box-shadow: 0 0 0 rgba(0, 245, 255, 0);
                 border-color: var(--glass-border);
             }
+
             25% {
                 box-shadow: 0 0 40px rgba(0, 245, 255, 0.5), inset 0 0 20px rgba(0, 245, 255, 0.15);
                 border-color: var(--neon-cyan);
                 transform: translateY(-2px);
             }
+
             100% {
                 box-shadow: 0 0 0 rgba(0, 245, 255, 0);
                 border-color: var(--glass-border);
@@ -723,8 +786,15 @@
         }
 
         @keyframes modalPop {
-            from { transform: scale(0.9) translateY(20px); opacity: 0; }
-            to { transform: scale(1) translateY(0); opacity: 1; }
+            from {
+                transform: scale(0.9) translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
         }
 
         .modal-header {
@@ -845,7 +915,11 @@
             min-width: 48px;
         }
 
-        .switch input { opacity: 0; width: 0; height: 0; }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
 
         .slider {
             position: absolute;
@@ -869,12 +943,12 @@
             border-radius: 50%;
         }
 
-        input:checked + .slider {
+        input:checked+.slider {
             background-color: rgba(0, 245, 255, 0.25);
             border-color: var(--neon-cyan);
         }
 
-        input:checked + .slider:before {
+        input:checked+.slider:before {
             transform: translateX(24px);
             background-color: var(--neon-cyan);
             box-shadow: 0 0 10px var(--neon-cyan);
@@ -937,7 +1011,7 @@
             transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .sidebar.expanded + .main {
+        .sidebar.expanded+.main {
             margin-left: var(--sidebar-expanded-width);
         }
 
@@ -974,19 +1048,40 @@
                 opacity: 0;
                 transform: translateY(20px) scale(0.97);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0) scale(1);
             }
         }
 
-        .glass-panel:nth-child(1) { animation-delay: 0.05s; }
-        .glass-panel:nth-child(2) { animation-delay: 0.1s; }
-        .glass-panel:nth-child(3) { animation-delay: 0.15s; }
-        .glass-panel:nth-child(4) { animation-delay: 0.2s; }
-        .glass-panel:nth-child(5) { animation-delay: 0.25s; }
-        .glass-panel:nth-child(6) { animation-delay: 0.3s; }
-        .glass-panel:nth-child(7) { animation-delay: 0.35s; }
+        .glass-panel:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+
+        .glass-panel:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .glass-panel:nth-child(3) {
+            animation-delay: 0.15s;
+        }
+
+        .glass-panel:nth-child(4) {
+            animation-delay: 0.2s;
+        }
+
+        .glass-panel:nth-child(5) {
+            animation-delay: 0.25s;
+        }
+
+        .glass-panel:nth-child(6) {
+            animation-delay: 0.3s;
+        }
+
+        .glass-panel:nth-child(7) {
+            animation-delay: 0.35s;
+        }
 
         .panel-header {
             display: flex;
@@ -1033,8 +1128,15 @@
         }
 
         @keyframes livePulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(57, 255, 20, 0.2); }
-            50% { box-shadow: 0 0 0 6px rgba(57, 255, 20, 0); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(57, 255, 20, 0.2);
+            }
+
+            50% {
+                box-shadow: 0 0 0 6px rgba(57, 255, 20, 0);
+            }
         }
 
         .panel-body {
@@ -1070,8 +1172,13 @@
             transition: opacity 0.3s;
         }
 
-        .glass-panel:hover::before { opacity: 0.7; }
-        .glass-panel:hover::after { opacity: 0.5; }
+        .glass-panel:hover::before {
+            opacity: 0.7;
+        }
+
+        .glass-panel:hover::after {
+            opacity: 0.5;
+        }
 
         /* ================================================================
            POSTURE GAUGE (Radial)
@@ -1238,8 +1345,13 @@
             gap: 4px;
         }
 
-        .stat-card .stat-trend.up { color: var(--neon-red); }
-        .stat-card .stat-trend.down { color: var(--neon-green); }
+        .stat-card .stat-trend.up {
+            color: var(--neon-red);
+        }
+
+        .stat-card .stat-trend.down {
+            color: var(--neon-green);
+        }
 
         /* Glow line at top of stat cards */
         .stat-card::before {
@@ -1252,26 +1364,73 @@
             border-radius: 0 0 2px 2px;
         }
 
-        .stat-card.cyan-glow::before { background: var(--neon-cyan); box-shadow: 0 0 12px var(--neon-cyan); }
-        .stat-card.red-glow::before { background: var(--neon-red); box-shadow: 0 0 12px var(--neon-red); }
-        .stat-card.green-glow::before { background: var(--neon-green); box-shadow: 0 0 12px var(--neon-green); }
-        .stat-card.magenta-glow::before { background: var(--neon-magenta); box-shadow: 0 0 12px var(--neon-magenta); }
+        .stat-card.cyan-glow::before {
+            background: var(--neon-cyan);
+            box-shadow: 0 0 12px var(--neon-cyan);
+        }
 
-        .stat-card.cyan-glow .stat-icon { background: rgba(0,245,255,0.1); }
-        .stat-card.cyan-glow .stat-icon svg { stroke: var(--neon-cyan); }
-        .stat-card.cyan-glow .stat-number { color: var(--neon-cyan); }
+        .stat-card.red-glow::before {
+            background: var(--neon-red);
+            box-shadow: 0 0 12px var(--neon-red);
+        }
 
-        .stat-card.red-glow .stat-icon { background: rgba(255,23,68,0.1); }
-        .stat-card.red-glow .stat-icon svg { stroke: var(--neon-red); }
-        .stat-card.red-glow .stat-number { color: var(--neon-red); }
+        .stat-card.green-glow::before {
+            background: var(--neon-green);
+            box-shadow: 0 0 12px var(--neon-green);
+        }
 
-        .stat-card.green-glow .stat-icon { background: rgba(57,255,20,0.1); }
-        .stat-card.green-glow .stat-icon svg { stroke: var(--neon-green); }
-        .stat-card.green-glow .stat-number { color: var(--neon-green); }
+        .stat-card.magenta-glow::before {
+            background: var(--neon-magenta);
+            box-shadow: 0 0 12px var(--neon-magenta);
+        }
 
-        .stat-card.magenta-glow .stat-icon { background: rgba(255,0,229,0.1); }
-        .stat-card.magenta-glow .stat-icon svg { stroke: var(--neon-magenta); }
-        .stat-card.magenta-glow .stat-number { color: var(--neon-magenta); }
+        .stat-card.cyan-glow .stat-icon {
+            background: rgba(0, 245, 255, 0.1);
+        }
+
+        .stat-card.cyan-glow .stat-icon svg {
+            stroke: var(--neon-cyan);
+        }
+
+        .stat-card.cyan-glow .stat-number {
+            color: var(--neon-cyan);
+        }
+
+        .stat-card.red-glow .stat-icon {
+            background: rgba(255, 23, 68, 0.1);
+        }
+
+        .stat-card.red-glow .stat-icon svg {
+            stroke: var(--neon-red);
+        }
+
+        .stat-card.red-glow .stat-number {
+            color: var(--neon-red);
+        }
+
+        .stat-card.green-glow .stat-icon {
+            background: rgba(57, 255, 20, 0.1);
+        }
+
+        .stat-card.green-glow .stat-icon svg {
+            stroke: var(--neon-green);
+        }
+
+        .stat-card.green-glow .stat-number {
+            color: var(--neon-green);
+        }
+
+        .stat-card.magenta-glow .stat-icon {
+            background: rgba(255, 0, 229, 0.1);
+        }
+
+        .stat-card.magenta-glow .stat-icon svg {
+            stroke: var(--neon-magenta);
+        }
+
+        .stat-card.magenta-glow .stat-number {
+            color: var(--neon-magenta);
+        }
 
         /* ================================================================
            KERNEL EVENT FEED (Terminal style)
@@ -1297,9 +1456,11 @@
         .event-feed::-webkit-scrollbar {
             width: 5px;
         }
+
         .event-feed::-webkit-scrollbar-track {
             background: transparent;
         }
+
         .event-feed::-webkit-scrollbar-thumb {
             background: rgba(0, 245, 255, 0.2);
             border-radius: 10px;
@@ -1315,8 +1476,15 @@
         }
 
         @keyframes eventSlideIn {
-            from { opacity: 0; transform: translateX(-10px); }
-            to { opacity: 1; transform: translateX(0); }
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .event-row:hover {
@@ -1324,16 +1492,55 @@
             border-left-color: var(--neon-cyan);
         }
 
-        .event-row .ts { color: var(--text-dim); min-width: 75px; }
-        .event-row .syscall { color: var(--neon-cyan); min-width: 72px; font-weight: 600; }
-        .event-row .pid { color: var(--neon-purple); min-width: 55px; }
-        .event-row .uid { color: var(--neon-orange); min-width: 45px; }
-        .event-row .comm { color: var(--neon-green); min-width: 95px; }
-        .event-row .path { color: var(--text-secondary); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .event-row .status { min-width: 60px; }
-        .event-row .status.ok { color: var(--neon-green); }
-        .event-row .status.fail { color: var(--neon-red); }
-        .event-row .status.warn { color: var(--neon-yellow); }
+        .event-row .ts {
+            color: var(--text-dim);
+            min-width: 75px;
+        }
+
+        .event-row .syscall {
+            color: var(--neon-cyan);
+            min-width: 72px;
+            font-weight: 600;
+        }
+
+        .event-row .pid {
+            color: var(--neon-purple);
+            min-width: 55px;
+        }
+
+        .event-row .uid {
+            color: var(--neon-orange);
+            min-width: 45px;
+        }
+
+        .event-row .comm {
+            color: var(--neon-green);
+            min-width: 95px;
+        }
+
+        .event-row .path {
+            color: var(--text-secondary);
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .event-row .status {
+            min-width: 60px;
+        }
+
+        .event-row .status.ok {
+            color: var(--neon-green);
+        }
+
+        .event-row .status.fail {
+            color: var(--neon-red);
+        }
+
+        .event-row .status.warn {
+            color: var(--neon-yellow);
+        }
 
         /* ================================================================
            THREAT ALERTS
@@ -1364,8 +1571,15 @@
         }
 
         @keyframes alertPop {
-            from { opacity: 0; transform: scale(0.92); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0.92);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .alert-card:hover {
@@ -1377,14 +1591,21 @@
             border-color: rgba(255, 23, 68, 0.25);
             box-shadow: inset -3px 0 0 var(--severity-critical);
         }
-        .alert-card.critical:hover { background: rgba(255, 23, 68, 0.1); box-shadow: inset -3px 0 0 var(--severity-critical), 0 4px 20px rgba(255,23,68,0.1); }
+
+        .alert-card.critical:hover {
+            background: rgba(255, 23, 68, 0.1);
+            box-shadow: inset -3px 0 0 var(--severity-critical), 0 4px 20px rgba(255, 23, 68, 0.1);
+        }
 
         .alert-card.high {
             background: rgba(255, 107, 53, 0.06);
             border-color: rgba(255, 107, 53, 0.25);
             box-shadow: inset -3px 0 0 var(--severity-high);
         }
-        .alert-card.high:hover { background: rgba(255, 107, 53, 0.1); }
+
+        .alert-card.high:hover {
+            background: rgba(255, 107, 53, 0.1);
+        }
 
         .alert-card.medium {
             background: rgba(255, 234, 0, 0.04);
@@ -1407,10 +1628,21 @@
             margin-bottom: 6px;
         }
 
-        .alert-card.critical .alert-severity { color: var(--severity-critical); }
-        .alert-card.high .alert-severity { color: var(--severity-high); }
-        .alert-card.medium .alert-severity { color: var(--severity-medium); }
-        .alert-card.low .alert-severity { color: var(--severity-low); }
+        .alert-card.critical .alert-severity {
+            color: var(--severity-critical);
+        }
+
+        .alert-card.high .alert-severity {
+            color: var(--severity-high);
+        }
+
+        .alert-card.medium .alert-severity {
+            color: var(--severity-medium);
+        }
+
+        .alert-card.low .alert-severity {
+            color: var(--severity-low);
+        }
 
         .alert-name {
             font-weight: 600;
@@ -1441,8 +1673,15 @@
             letter-spacing: 1px;
         }
 
-        .alert-card.critical .alert-action { background: rgba(255,23,68,0.15); color: var(--severity-critical); }
-        .alert-card.high .alert-action { background: rgba(255,107,53,0.15); color: var(--severity-high); }
+        .alert-card.critical .alert-action {
+            background: rgba(255, 23, 68, 0.15);
+            color: var(--severity-critical);
+        }
+
+        .alert-card.high .alert-action {
+            background: rgba(255, 107, 53, 0.15);
+            color: var(--severity-high);
+        }
 
         /* ================================================================
            PROCESS TREE
@@ -1559,8 +1798,15 @@
         }
 
         @keyframes timelineFade {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .timeline-item::after {
@@ -1570,7 +1816,7 @@
             left: 50%;
             width: 100%;
             height: 2px;
-            background: linear-gradient(90deg, rgba(0,245,255,0.3), rgba(180,77,255,0.3));
+            background: linear-gradient(90deg, rgba(0, 245, 255, 0.3), rgba(180, 77, 255, 0.3));
         }
 
         .timeline-item:last-child::after {
@@ -1595,14 +1841,41 @@
             opacity: 0.3;
         }
 
-        .timeline-dot.critical { background: var(--severity-critical); box-shadow: 0 0 12px var(--severity-critical); }
-        .timeline-dot.critical::after { border-color: var(--severity-critical); }
-        .timeline-dot.high { background: var(--severity-high); box-shadow: 0 0 12px var(--severity-high); }
-        .timeline-dot.high::after { border-color: var(--severity-high); }
-        .timeline-dot.medium { background: var(--severity-medium); box-shadow: 0 0 10px var(--severity-medium); }
-        .timeline-dot.medium::after { border-color: var(--severity-medium); }
-        .timeline-dot.low { background: var(--severity-low); box-shadow: 0 0 10px var(--severity-low); }
-        .timeline-dot.low::after { border-color: var(--severity-low); }
+        .timeline-dot.critical {
+            background: var(--severity-critical);
+            box-shadow: 0 0 12px var(--severity-critical);
+        }
+
+        .timeline-dot.critical::after {
+            border-color: var(--severity-critical);
+        }
+
+        .timeline-dot.high {
+            background: var(--severity-high);
+            box-shadow: 0 0 12px var(--severity-high);
+        }
+
+        .timeline-dot.high::after {
+            border-color: var(--severity-high);
+        }
+
+        .timeline-dot.medium {
+            background: var(--severity-medium);
+            box-shadow: 0 0 10px var(--severity-medium);
+        }
+
+        .timeline-dot.medium::after {
+            border-color: var(--severity-medium);
+        }
+
+        .timeline-dot.low {
+            background: var(--severity-low);
+            box-shadow: 0 0 10px var(--severity-low);
+        }
+
+        .timeline-dot.low::after {
+            border-color: var(--severity-low);
+        }
 
         .timeline-content {
             text-align: center;
@@ -1627,7 +1900,7 @@
             font-size: 0.6rem;
             color: var(--neon-green);
             padding: 2px 8px;
-            background: rgba(57,255,20,0.08);
+            background: rgba(57, 255, 20, 0.08);
             border-radius: 4px;
             display: inline-block;
             margin-top: 4px;
@@ -1675,7 +1948,9 @@
             transition: opacity 0.3s;
         }
 
-        .sim-btn:hover::before { opacity: 1; }
+        .sim-btn:hover::before {
+            opacity: 1;
+        }
 
         .sim-btn:hover {
             transform: translateY(-3px);
@@ -1690,56 +1965,105 @@
             border: 1px solid rgba(255, 23, 68, 0.25);
             color: var(--severity-critical);
         }
-        .sim-btn.ransomware:hover { box-shadow: 0 8px 30px rgba(255,23,68,0.15); border-color: rgba(255,23,68,0.5); }
-        .sim-btn.ransomware::before { background: radial-gradient(circle at center, rgba(255,23,68,0.08), transparent 70%); }
+
+        .sim-btn.ransomware:hover {
+            box-shadow: 0 8px 30px rgba(255, 23, 68, 0.15);
+            border-color: rgba(255, 23, 68, 0.5);
+        }
+
+        .sim-btn.ransomware::before {
+            background: radial-gradient(circle at center, rgba(255, 23, 68, 0.08), transparent 70%);
+        }
 
         .sim-btn.trojan {
             background: rgba(255, 107, 53, 0.08);
             border: 1px solid rgba(255, 107, 53, 0.25);
             color: var(--severity-high);
         }
-        .sim-btn.trojan:hover { box-shadow: 0 8px 30px rgba(255,107,53,0.15); border-color: rgba(255,107,53,0.5); }
-        .sim-btn.trojan::before { background: radial-gradient(circle at center, rgba(255,107,53,0.08), transparent 70%); }
+
+        .sim-btn.trojan:hover {
+            box-shadow: 0 8px 30px rgba(255, 107, 53, 0.15);
+            border-color: rgba(255, 107, 53, 0.5);
+        }
+
+        .sim-btn.trojan::before {
+            background: radial-gradient(circle at center, rgba(255, 107, 53, 0.08), transparent 70%);
+        }
 
         .sim-btn.portscan {
             background: rgba(255, 234, 0, 0.06);
             border: 1px solid rgba(255, 234, 0, 0.2);
             color: var(--severity-medium);
         }
-        .sim-btn.portscan:hover { box-shadow: 0 8px 30px rgba(255,234,0,0.1); border-color: rgba(255,234,0,0.4); }
-        .sim-btn.portscan::before { background: radial-gradient(circle at center, rgba(255,234,0,0.06), transparent 70%); }
+
+        .sim-btn.portscan:hover {
+            box-shadow: 0 8px 30px rgba(255, 234, 0, 0.1);
+            border-color: rgba(255, 234, 0, 0.4);
+        }
+
+        .sim-btn.portscan::before {
+            background: radial-gradient(circle at center, rgba(255, 234, 0, 0.06), transparent 70%);
+        }
 
         .sim-btn.bruteforce {
             background: rgba(180, 77, 255, 0.08);
             border: 1px solid rgba(180, 77, 255, 0.25);
             color: var(--neon-purple);
         }
-        .sim-btn.bruteforce:hover { box-shadow: 0 8px 30px rgba(180,77,255,0.15); border-color: rgba(180,77,255,0.5); }
-        .sim-btn.bruteforce::before { background: radial-gradient(circle at center, rgba(180,77,255,0.08), transparent 70%); }
+
+        .sim-btn.bruteforce:hover {
+            box-shadow: 0 8px 30px rgba(180, 77, 255, 0.15);
+            border-color: rgba(180, 77, 255, 0.5);
+        }
+
+        .sim-btn.bruteforce::before {
+            background: radial-gradient(circle at center, rgba(180, 77, 255, 0.08), transparent 70%);
+        }
 
         .sim-btn.privesc {
             background: rgba(0, 245, 255, 0.08);
             border: 1px solid rgba(0, 245, 255, 0.25);
             color: var(--neon-cyan);
         }
-        .sim-btn.privesc:hover { box-shadow: 0 8px 30px rgba(0,245,255,0.15); border-color: rgba(0,245,255,0.5); }
-        .sim-btn.privesc::before { background: radial-gradient(circle at center, rgba(0,245,255,0.08), transparent 70%); }
+
+        .sim-btn.privesc:hover {
+            box-shadow: 0 8px 30px rgba(0, 245, 255, 0.15);
+            border-color: rgba(0, 245, 255, 0.5);
+        }
+
+        .sim-btn.privesc::before {
+            background: radial-gradient(circle at center, rgba(0, 245, 255, 0.08), transparent 70%);
+        }
 
         .sim-btn.cryptominer {
             background: rgba(57, 255, 20, 0.08);
             border: 1px solid rgba(57, 255, 20, 0.25);
             color: var(--neon-green);
         }
-        .sim-btn.cryptominer:hover { box-shadow: 0 8px 30px rgba(57,255,20,0.15); border-color: rgba(57,255,20,0.5); }
-        .sim-btn.cryptominer::before { background: radial-gradient(circle at center, rgba(57,255,20,0.08), transparent 70%); }
+
+        .sim-btn.cryptominer:hover {
+            box-shadow: 0 8px 30px rgba(57, 255, 20, 0.15);
+            border-color: rgba(57, 255, 20, 0.5);
+        }
+
+        .sim-btn.cryptominer::before {
+            background: radial-gradient(circle at center, rgba(57, 255, 20, 0.08), transparent 70%);
+        }
 
         .sim-btn.ddos {
             background: rgba(255, 107, 53, 0.08);
             border: 1px solid rgba(255, 107, 53, 0.25);
             color: var(--neon-orange);
         }
-        .sim-btn.ddos:hover { box-shadow: 0 8px 30px rgba(255,107,53,0.15); border-color: rgba(255,107,53,0.5); }
-        .sim-btn.ddos::before { background: radial-gradient(circle at center, rgba(255,107,53,0.08), transparent 70%); }
+
+        .sim-btn.ddos:hover {
+            box-shadow: 0 8px 30px rgba(255, 107, 53, 0.15);
+            border-color: rgba(255, 107, 53, 0.5);
+        }
+
+        .sim-btn.ddos::before {
+            background: radial-gradient(circle at center, rgba(255, 107, 53, 0.08), transparent 70%);
+        }
 
         /* Simulation Studio & Kill Chain Ribbon */
         .sim-toolbar {
@@ -1855,8 +2179,13 @@
             color: var(--text-secondary);
         }
 
-        .kc-phase.active .kc-phase-name { color: var(--neon-red); }
-        .kc-phase.defended .kc-phase-name { color: var(--neon-green); }
+        .kc-phase.active .kc-phase-name {
+            color: var(--neon-red);
+        }
+
+        .kc-phase.defended .kc-phase-name {
+            color: var(--neon-green);
+        }
 
         /* MITRE ATT&CK Matrix Grid */
         .mitre-panel {
@@ -1951,8 +2280,13 @@
             justify-content: space-between;
         }
 
-        .stream-col-header.red { color: var(--severity-critical); }
-        .stream-col-header.blue { color: var(--neon-cyan); }
+        .stream-col-header.red {
+            color: var(--severity-critical);
+        }
+
+        .stream-col-header.blue {
+            color: var(--neon-cyan);
+        }
 
         .engine-mode-pill {
             display: inline-flex;
@@ -1995,12 +2329,14 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
             animation: shimmer 1.5s infinite;
         }
 
         @keyframes shimmer {
-            to { left: 100%; }
+            to {
+                left: 100%;
+            }
         }
 
         /* ================================================================
@@ -2038,12 +2374,22 @@
         }
 
         @keyframes toastIn {
-            from { opacity: 0; transform: translateX(100px) scale(0.9); }
-            to { opacity: 1; transform: translateX(0) scale(1); }
+            from {
+                opacity: 0;
+                transform: translateX(100px) scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
         }
 
         @keyframes toastOut {
-            to { opacity: 0; transform: translateX(100px) scale(0.9); }
+            to {
+                opacity: 0;
+                transform: translateX(100px) scale(0.9);
+            }
         }
 
         .toast.critical {
@@ -2082,48 +2428,111 @@
            RESPONSIVE
            ================================================================ */
         @media (max-width: 1200px) {
-            .posture-panel { grid-column: span 5; }
-            .stats-row { grid-column: span 7; }
-            .event-feed-panel { grid-column: span 7; }
-            .alerts-panel { grid-column: span 5; }
-            .process-tree-panel { grid-column: span 6; }
-            .network-panel { grid-column: span 6; }
+            .posture-panel {
+                grid-column: span 5;
+            }
+
+            .stats-row {
+                grid-column: span 7;
+            }
+
+            .event-feed-panel {
+                grid-column: span 7;
+            }
+
+            .alerts-panel {
+                grid-column: span 5;
+            }
+
+            .process-tree-panel {
+                grid-column: span 6;
+            }
+
+            .network-panel {
+                grid-column: span 6;
+            }
         }
 
         @media (max-width: 768px) {
-            .mobile-menu-btn { display: flex; }
+            .mobile-menu-btn {
+                display: flex;
+            }
+
             .sidebar {
                 display: flex !important;
                 transform: translateX(-100%);
                 width: 240px !important;
                 z-index: 150;
-                box-shadow: 0 0 50px rgba(0,0,0,0.85);
+                box-shadow: 0 0 50px rgba(0, 0, 0, 0.85);
                 overflow-x: hidden !important;
                 overflow-y: auto !important;
             }
+
             .sidebar:not(.expanded) {
                 overflow: hidden !important;
             }
+
             .sidebar.mobile-open {
                 transform: translateX(0);
             }
-            .sidebar .nav-label { display: inline-block !important; }
-            .sidebar .nav-badge { display: inline-block !important; }
-            .sidebar .nav-btn { justify-content: flex-start !important; padding: 0 14px !important; width: 100% !important; margin: 0 !important; }
-            .sidebar .sidebar-brand { display: block !important; }
-            .sidebar-toggle-btn { display: none !important; }
-            .main { margin-left: 0 !important; }
-            .sidebar.expanded + .main { margin-left: 0 !important; }
-            .sidebar-backdrop { z-index: 140; }
-            .posture-panel, .stats-row, .event-feed-panel, .alerts-panel,
-            .process-tree-panel, .network-panel, .timeline-panel, .sim-controls-panel {
+
+            .sidebar .nav-label {
+                display: inline-block !important;
+            }
+
+            .sidebar .nav-badge {
+                display: inline-block !important;
+            }
+
+            .sidebar .nav-btn {
+                justify-content: flex-start !important;
+                padding: 0 14px !important;
+                width: 100% !important;
+                margin: 0 !important;
+            }
+
+            .sidebar .sidebar-brand {
+                display: block !important;
+            }
+
+            .sidebar-toggle-btn {
+                display: none !important;
+            }
+
+            .main {
+                margin-left: 0 !important;
+            }
+
+            .sidebar.expanded+.main {
+                margin-left: 0 !important;
+            }
+
+            .sidebar-backdrop {
+                z-index: 140;
+            }
+
+            .posture-panel,
+            .stats-row,
+            .event-feed-panel,
+            .alerts-panel,
+            .process-tree-panel,
+            .network-panel,
+            .timeline-panel,
+            .sim-controls-panel {
                 grid-column: span 12;
             }
-            .stats-row { grid-template-columns: repeat(2, 1fr); }
-            .header-stats { display: none; }
+
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .header-stats {
+                display: none;
+            }
         }
     </style>
 </head>
+
 <body>
     <!-- Animated background layers -->
     <canvas id="particles-canvas"></canvas>
@@ -2136,12 +2545,17 @@
     <header class="header">
         <div class="logo-group">
             <button class="mobile-menu-btn" onclick="toggleMobileSidebar()" aria-label="Toggle navigation menu">
-                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                    <line x1="3" y1="12" x2="21" y2="12" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
             </button>
             <div class="logo-icon">
                 <svg class="shield" viewBox="0 0 40 40">
                     <path d="M20 3 L36 10 L36 22 C36 30 28 37 20 39 C12 37 4 30 4 22 L4 10 Z" />
-                    <path d="M20 10 L14 18 L18 18 L16 28 L26 17 L21 17 L24 10 Z" stroke="var(--neon-cyan)" stroke-width="1" fill="rgba(0,245,255,0.15)" />
+                    <path d="M20 10 L14 18 L18 18 L16 28 L26 17 L21 17 L24 10 Z" stroke="var(--neon-cyan)"
+                        stroke-width="1" fill="rgba(0,245,255,0.15)" />
                 </svg>
             </div>
             <div>
@@ -2149,7 +2563,8 @@
                 <div class="logo-subtitle">Cyber Defense Simulation Command Center</div>
             </div>
             <div class="engine-mode-pill" id="engineModePill" style="margin-left:14px;">
-                <span id="engineModeDot" style="width:7px;height:7px;border-radius:50%;background:var(--neon-green);display:inline-block;box-shadow:0 0 8px var(--neon-green)"></span>
+                <span id="engineModeDot"
+                    style="width:7px;height:7px;border-radius:50%;background:var(--neon-green);display:inline-block;box-shadow:0 0 8px var(--neon-green)"></span>
                 <span id="engineModeText">STANDALONE ENGINE</span>
             </div>
         </div>
@@ -2192,58 +2607,98 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <span class="sidebar-brand">NAVIGATION</span>
-            <button class="sidebar-toggle-btn" id="sidebarToggle" onclick="toggleSidebarCollapse()" title="Expand / Collapse Sidebar">
-                <svg viewBox="0 0 24 24"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+            <button class="sidebar-toggle-btn" id="sidebarToggle" onclick="toggleSidebarCollapse()"
+                title="Expand / Collapse Sidebar">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="13 17 18 12 13 7" />
+                    <polyline points="6 17 11 12 6 7" />
+                </svg>
             </button>
         </div>
 
         <nav class="sidebar-nav">
-            <button class="nav-btn active" data-target="section-dashboard" onclick="navigateTo('section-dashboard', this)" title="Dashboard Overview">
-                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            <button class="nav-btn active" data-target="section-dashboard"
+                onclick="navigateTo('section-dashboard', this)" title="Dashboard Overview">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="7" height="7" rx="1" />
+                    <rect x="14" y="3" width="7" height="7" rx="1" />
+                    <rect x="3" y="14" width="7" height="7" rx="1" />
+                    <rect x="14" y="14" width="7" height="7" rx="1" />
+                </svg>
                 <span class="nav-label">Dashboard</span>
                 <span class="nav-tooltip">Dashboard Overview</span>
             </button>
 
-            <button class="nav-btn" data-target="section-posture" onclick="navigateTo('section-posture', this)" title="Security Posture Score">
-                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <button class="nav-btn" data-target="section-posture" onclick="navigateTo('section-posture', this)"
+                title="Security Posture Score">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
                 <span class="nav-label">Posture Score</span>
                 <span class="nav-tooltip">Security Posture</span>
             </button>
 
-            <button class="nav-btn" data-target="section-events" onclick="navigateTo('section-events', this)" title="Kernel Syscall Event Feed">
-                <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <button class="nav-btn" data-target="section-events" onclick="navigateTo('section-events', this)"
+                title="Kernel Syscall Event Feed">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                </svg>
                 <span class="nav-label">Event Feed</span>
                 <span class="nav-badge live">LIVE</span>
                 <span class="nav-tooltip">Kernel Event Feed</span>
             </button>
 
-            <button class="nav-btn" data-target="section-alerts" onclick="navigateTo('section-alerts', this)" title="Threat Alerts & Incidents">
-                <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <button class="nav-btn" data-target="section-alerts" onclick="navigateTo('section-alerts', this)"
+                title="Threat Alerts & Incidents">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                    <line x1="12" y1="9" x2="12" y2="13" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
                 <span class="nav-label">Threat Alerts</span>
                 <span class="nav-badge count" id="navAlertCount">7</span>
                 <span class="nav-tooltip">Threat Alerts</span>
             </button>
 
-            <button class="nav-btn" data-target="section-tree" onclick="navigateTo('section-tree', this)" title="Process Execution Tree">
-                <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <button class="nav-btn" data-target="section-tree" onclick="navigateTo('section-tree', this)"
+                title="Process Execution Tree">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="16 18 22 12 16 6" />
+                    <polyline points="8 6 2 12 8 18" />
+                </svg>
                 <span class="nav-label">Process Tree</span>
                 <span class="nav-tooltip">Process Tree</span>
             </button>
 
-            <button class="nav-btn" data-target="section-network" onclick="navigateTo('section-network', this)" title="Network Topology & Active Connections">
-                <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            <button class="nav-btn" data-target="section-network" onclick="navigateTo('section-network', this)"
+                title="Network Topology & Active Connections">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="18" cy="5" r="3" />
+                    <circle cx="6" cy="12" r="3" />
+                    <circle cx="18" cy="19" r="3" />
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                </svg>
                 <span class="nav-label">Network Graph</span>
                 <span class="nav-tooltip">Network Topology</span>
             </button>
 
-            <button class="nav-btn" data-target="section-timeline" onclick="navigateTo('section-timeline', this)" title="Autonomous Response Timeline">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <button class="nav-btn" data-target="section-timeline" onclick="navigateTo('section-timeline', this)"
+                title="Autonomous Response Timeline">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                </svg>
                 <span class="nav-label">Timeline</span>
                 <span class="nav-tooltip">Response Timeline</span>
             </button>
 
-            <button class="nav-btn" data-target="section-simulations" onclick="navigateTo('section-simulations', this)" title="Cyber Attack Simulations">
-                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <button class="nav-btn" data-target="section-simulations" onclick="navigateTo('section-simulations', this)"
+                title="Cyber Attack Simulations">
+                <svg viewBox="0 0 24 24">
+                    <polygon points="5 3 19 12 5 21 5 3" />
+                </svg>
                 <span class="nav-label">Attack Sims</span>
                 <span class="nav-tooltip">Attack Simulations</span>
             </button>
@@ -2251,7 +2706,11 @@
 
         <div class="sidebar-footer">
             <button class="nav-btn" onclick="openSettingsModal()" title="System Configuration & Settings">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="3" />
+                    <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg>
                 <span class="nav-label">Settings</span>
                 <span class="nav-tooltip">System Settings</span>
             </button>
@@ -2271,7 +2730,9 @@
             <section class="glass-panel posture-panel" id="section-posture">
                 <div class="panel-header">
                     <div class="panel-title">
-                        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
                         Security Posture
                     </div>
                     <span class="panel-badge live">● LIVE</span>
@@ -2280,29 +2741,35 @@
                     <div class="gauge-container">
                         <svg class="gauge-svg" viewBox="0 0 200 200">
                             <circle class="gauge-track" cx="100" cy="100" r="80" />
-                            <circle id="gaugeFill" class="gauge-fill" cx="100" cy="100" r="80"
-                                    stroke="url(#gaugeGrad)"
-                                    stroke-dasharray="502.65"
-                                    stroke-dashoffset="502.65" />
+                            <circle id="gaugeFill" class="gauge-fill" cx="100" cy="100" r="80" stroke="url(#gaugeGrad)"
+                                stroke-dasharray="502.65" stroke-dashoffset="502.65" />
                             <defs>
                                 <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#ff1744"/>
-                                    <stop offset="40%" stop-color="#ffea00"/>
-                                    <stop offset="70%" stop-color="#00f5ff"/>
-                                    <stop offset="100%" stop-color="#39ff14"/>
+                                    <stop offset="0%" stop-color="#ff1744" />
+                                    <stop offset="40%" stop-color="#ffea00" />
+                                    <stop offset="70%" stop-color="#00f5ff" />
+                                    <stop offset="100%" stop-color="#39ff14" />
                                 </linearGradient>
                             </defs>
-                            <text id="gaugeValue" class="gauge-value" x="100" y="100" text-anchor="middle" dy="8">0</text>
+                            <text id="gaugeValue" class="gauge-value" x="100" y="100" text-anchor="middle"
+                                dy="8">0</text>
                             <text class="gauge-label" x="100" y="125" text-anchor="middle">/ 100</text>
-                            <text id="gaugeGrade" class="gauge-grade" x="100" y="148" text-anchor="middle" fill="#ffea00">—</text>
+                            <text id="gaugeGrade" class="gauge-grade" x="100" y="148" text-anchor="middle"
+                                fill="#ffea00">—</text>
                         </svg>
                         <div class="posture-details">
-                            <div class="posture-item"><span class="label">Firewall</span><span class="value" style="color:var(--neon-green)">92</span></div>
-                            <div class="posture-item"><span class="label">Open Ports</span><span class="value" style="color:var(--neon-yellow)">68</span></div>
-                            <div class="posture-item"><span class="label">SUID Bins</span><span class="value" style="color:var(--neon-cyan)">85</span></div>
-                            <div class="posture-item"><span class="label">SSH Config</span><span class="value" style="color:var(--neon-green)">90</span></div>
-                            <div class="posture-item"><span class="label">Updates</span><span class="value" style="color:var(--neon-orange)">55</span></div>
-                            <div class="posture-item"><span class="label">Encryption</span><span class="value" style="color:var(--neon-green)">100</span></div>
+                            <div class="posture-item"><span class="label">Firewall</span><span class="value"
+                                    style="color:var(--neon-green)">92</span></div>
+                            <div class="posture-item"><span class="label">Open Ports</span><span class="value"
+                                    style="color:var(--neon-yellow)">68</span></div>
+                            <div class="posture-item"><span class="label">SUID Bins</span><span class="value"
+                                    style="color:var(--neon-cyan)">85</span></div>
+                            <div class="posture-item"><span class="label">SSH Config</span><span class="value"
+                                    style="color:var(--neon-green)">90</span></div>
+                            <div class="posture-item"><span class="label">Updates</span><span class="value"
+                                    style="color:var(--neon-orange)">55</span></div>
+                            <div class="posture-item"><span class="label">Encryption</span><span class="value"
+                                    style="color:var(--neon-green)">100</span></div>
                         </div>
                     </div>
                 </div>
@@ -2311,25 +2778,39 @@
             <!-- STATS CARDS -->
             <div class="stats-row" id="section-stats">
                 <div class="stat-card cyan-glow">
-                    <div class="stat-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+                    <div class="stat-icon"><svg viewBox="0 0 24 24">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                        </svg></div>
                     <div class="stat-number" id="totalEvents">12,847</div>
                     <div class="stat-label">Total Events</div>
                     <div class="stat-trend up">▲ +342 last hour</div>
                 </div>
                 <div class="stat-card red-glow">
-                    <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+                    <div class="stat-icon"><svg viewBox="0 0 24 24">
+                            <path
+                                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                            <line x1="12" y1="9" x2="12" y2="13" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg></div>
                     <div class="stat-number" id="activeAlerts">7</div>
                     <div class="stat-label">Active Alerts</div>
                     <div class="stat-trend up">▲ +2 critical</div>
                 </div>
                 <div class="stat-card green-glow">
-                    <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                    <div class="stat-icon"><svg viewBox="0 0 24 24">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg></div>
                     <div class="stat-number" id="blockedThreats">23</div>
                     <div class="stat-label">Threats Blocked</div>
                     <div class="stat-trend down">▼ -5 vs yesterday</div>
                 </div>
                 <div class="stat-card magenta-glow">
-                    <div class="stat-icon"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></div>
+                    <div class="stat-icon"><svg viewBox="0 0 24 24">
+                            <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
+                            <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
+                            <line x1="6" y1="6" x2="6.01" y2="6" />
+                            <line x1="6" y1="18" x2="6.01" y2="18" />
+                        </svg></div>
                     <div class="stat-number" id="monitoredProcs">1,247</div>
                     <div class="stat-label">Processes Monitored</div>
                     <div class="stat-trend down">↻ scanned 14s ago</div>
@@ -2340,7 +2821,9 @@
             <section class="glass-panel event-feed-panel" id="section-events">
                 <div class="panel-header">
                     <div class="panel-title">
-                        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        <svg viewBox="0 0 24 24">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                        </svg>
                         Kernel Event Feed
                     </div>
                     <span class="panel-badge live">● STREAMING</span>
@@ -2354,7 +2837,10 @@
             <section class="glass-panel alerts-panel" id="section-alerts">
                 <div class="panel-header">
                     <div class="panel-title">
-                        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                        </svg>
                         Threat Alerts
                     </div>
                     <span class="panel-badge live">● LIVE</span>
@@ -2368,7 +2854,10 @@
             <section class="glass-panel process-tree-panel" id="section-tree">
                 <div class="panel-header">
                     <div class="panel-title">
-                        <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        <svg viewBox="0 0 24 24">
+                            <polyline points="16 18 22 12 16 6" />
+                            <polyline points="8 6 2 12 8 18" />
+                        </svg>
                         Process Tree
                     </div>
                 </div>
@@ -2381,7 +2870,13 @@
             <section class="glass-panel network-panel" id="section-network">
                 <div class="panel-header">
                     <div class="panel-title">
-                        <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="18" cy="5" r="3" />
+                            <circle cx="6" cy="12" r="3" />
+                            <circle cx="18" cy="19" r="3" />
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                        </svg>
                         Network Topology
                     </div>
                     <span class="panel-badge live">● MONITOR</span>
@@ -2397,7 +2892,10 @@
             <section class="glass-panel timeline-panel" id="section-timeline">
                 <div class="panel-header">
                     <div class="panel-title">
-                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
                         Response Timeline
                     </div>
                 </div>
@@ -2410,34 +2908,58 @@
             <section class="glass-panel sim-controls-panel" id="section-simulations" style="grid-column: span 12;">
                 <div class="panel-header">
                     <div class="panel-title">
-                        <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        <svg viewBox="0 0 24 24">
+                            <polygon points="5 3 19 12 5 21 5 3" />
+                        </svg>
                         Cyber Attack & Defense Simulation Studio
                     </div>
                     <div style="display:flex;align-items:center;gap:10px;">
-                        <span id="activeScenarioLabel" style="font-family:'Orbitron',monospace;font-size:0.7rem;color:var(--neon-cyan)">READY — SELECT SCENARIO</span>
+                        <span id="activeScenarioLabel"
+                            style="font-family:'Orbitron',monospace;font-size:0.7rem;color:var(--neon-cyan)">READY —
+                            SELECT SCENARIO</span>
                     </div>
                 </div>
                 <div class="panel-body">
                     <!-- Simulation Toolbar -->
                     <div class="sim-toolbar">
                         <div class="sim-btn-group">
-                            <button class="sim-action-btn success" onclick="resetSimulationFeed()" title="Reset to clean baseline">
-                                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                            <button class="sim-action-btn success" onclick="resetSimulationFeed()"
+                                title="Reset to clean baseline">
+                                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2"
+                                    fill="none">
+                                    <path d="M23 4v6h-6" />
+                                    <path d="M1 20v-6h6" />
+                                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                                </svg>
                                 Reset Baseline
                             </button>
                             <button class="sim-action-btn" onclick="openCustomScenarioModal()">
-                                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2"
+                                    fill="none">
+                                    <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                                    <polyline points="2 17 12 22 22 17" />
+                                    <polyline points="2 12 12 17 22 12" />
+                                </svg>
                                 Custom Payload Builder
                             </button>
                             <button class="sim-action-btn" onclick="openForensicReportModal()">
-                                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2"
+                                    fill="none">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                    <line x1="16" y1="13" x2="8" y2="13" />
+                                    <line x1="16" y1="17" x2="8" y2="17" />
+                                </svg>
                                 Forensic Incident Report
                             </button>
                         </div>
                         <div class="sim-btn-group">
-                            <span style="font-family:'Rajdhani',sans-serif;font-size:0.75rem;color:var(--text-dim);margin-right:4px;">PLAYBACK SPEED:</span>
+                            <span
+                                style="font-family:'Rajdhani',sans-serif;font-size:0.75rem;color:var(--text-dim);margin-right:4px;">PLAYBACK
+                                SPEED:</span>
                             <button class="speed-btn" data-speed="0.5" onclick="setSimSpeed(0.5, this)">0.5x</button>
-                            <button class="speed-btn active" data-speed="1.0" onclick="setSimSpeed(1.0, this)">1.0x</button>
+                            <button class="speed-btn active" data-speed="1.0"
+                                onclick="setSimSpeed(1.0, this)">1.0x</button>
                             <button class="speed-btn" data-speed="2.0" onclick="setSimSpeed(2.0, this)">2.0x</button>
                             <button class="speed-btn" data-speed="5.0" onclick="setSimSpeed(5.0, this)">Instant</button>
                         </div>
@@ -2445,20 +2967,42 @@
 
                     <!-- Cyber Kill Chain Phase Ribbon -->
                     <div class="kill-chain-tracker" id="killChainTracker">
-                        <div class="kc-phase" id="kc-phase-1"><div class="kc-phase-num">PHASE 01</div><div class="kc-phase-name">Reconnaissance</div></div>
-                        <div class="kc-phase" id="kc-phase-2"><div class="kc-phase-num">PHASE 02</div><div class="kc-phase-name">Weaponization</div></div>
-                        <div class="kc-phase" id="kc-phase-3"><div class="kc-phase-num">PHASE 03</div><div class="kc-phase-name">Delivery</div></div>
-                        <div class="kc-phase" id="kc-phase-4"><div class="kc-phase-num">PHASE 04</div><div class="kc-phase-name">Exploitation</div></div>
-                        <div class="kc-phase" id="kc-phase-5"><div class="kc-phase-num">PHASE 05</div><div class="kc-phase-name">Installation</div></div>
-                        <div class="kc-phase" id="kc-phase-6"><div class="kc-phase-num">PHASE 06</div><div class="kc-phase-name">Command & Control</div></div>
-                        <div class="kc-phase" id="kc-phase-7"><div class="kc-phase-num">PHASE 07</div><div class="kc-phase-name">Objectives</div></div>
+                        <div class="kc-phase" id="kc-phase-1">
+                            <div class="kc-phase-num">PHASE 01</div>
+                            <div class="kc-phase-name">Reconnaissance</div>
+                        </div>
+                        <div class="kc-phase" id="kc-phase-2">
+                            <div class="kc-phase-num">PHASE 02</div>
+                            <div class="kc-phase-name">Weaponization</div>
+                        </div>
+                        <div class="kc-phase" id="kc-phase-3">
+                            <div class="kc-phase-num">PHASE 03</div>
+                            <div class="kc-phase-name">Delivery</div>
+                        </div>
+                        <div class="kc-phase" id="kc-phase-4">
+                            <div class="kc-phase-num">PHASE 04</div>
+                            <div class="kc-phase-name">Exploitation</div>
+                        </div>
+                        <div class="kc-phase" id="kc-phase-5">
+                            <div class="kc-phase-num">PHASE 05</div>
+                            <div class="kc-phase-name">Installation</div>
+                        </div>
+                        <div class="kc-phase" id="kc-phase-6">
+                            <div class="kc-phase-num">PHASE 06</div>
+                            <div class="kc-phase-name">Command & Control</div>
+                        </div>
+                        <div class="kc-phase" id="kc-phase-7">
+                            <div class="kc-phase-num">PHASE 07</div>
+                            <div class="kc-phase-name">Objectives</div>
+                        </div>
                     </div>
 
                     <!-- 7 Attack Vector Buttons -->
                     <div class="sim-controls" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
                         <button class="sim-btn ransomware" onclick="runSimulation('ransomware', event)">
                             🔐 Ransomware Mass Encryption
-                            <span class="sim-btn-desc">High entropy writes (7.92) + mass .locked rename + canary trap breach</span>
+                            <span class="sim-btn-desc">High entropy writes (7.92) + mass .locked rename + canary trap
+                                breach</span>
                         </button>
                         <button class="sim-btn trojan" onclick="runSimulation('trojan', event)">
                             🐴 Trojan Dropper & C2 Shell
@@ -2470,19 +3014,23 @@
                         </button>
                         <button class="sim-btn bruteforce" onclick="runSimulation('bruteforce', event)">
                             🔑 SSH Credential Stuffing
-                            <span class="sim-btn-desc">Dictionary attack burst across admin/root accounts → IP lockout</span>
+                            <span class="sim-btn-desc">Dictionary attack burst across admin/root accounts → IP
+                                lockout</span>
                         </button>
                         <button class="sim-btn privesc" onclick="runSimulation('privesc', event)">
                             ⚡ SUID Privilege Escalation
-                            <span class="sim-btn-desc">pkexec shared obj exploit → setuid(0) elevation → shadow read</span>
+                            <span class="sim-btn-desc">pkexec shared obj exploit → setuid(0) elevation → shadow
+                                read</span>
                         </button>
                         <button class="sim-btn cryptominer" onclick="runSimulation('cryptominer', event)">
                             ⛏️ Stealth Crypto Miner
-                            <span class="sim-btn-desc">syslog-worker disguise → 98% CPU burn → Stratum pool beacon</span>
+                            <span class="sim-btn-desc">syslog-worker disguise → 98% CPU burn → Stratum pool
+                                beacon</span>
                         </button>
                         <button class="sim-btn ddos" onclick="runSimulation('ddos', event)">
                             🌊 Volumetric SYN Flood
-                            <span class="sim-btn-desc">Spoofed botnet SYN flood → queue exhaustion → SYN cookie defense</span>
+                            <span class="sim-btn-desc">Spoofed botnet SYN flood → queue exhaustion → SYN cookie
+                                defense</span>
                         </button>
                     </div>
 
@@ -2494,7 +3042,8 @@
                                 <span id="redEventCount">0 EVENTS</span>
                             </div>
                             <div id="redStreamFeed" style="display:flex;flex-direction:column;gap:4px;">
-                                <div style="color:var(--text-dim);font-style:italic;">No active attack vector running. Select a scenario above to observe execution telemetry.</div>
+                                <div style="color:var(--text-dim);font-style:italic;">No active attack vector running.
+                                    Select a scenario above to observe execution telemetry.</div>
                             </div>
                         </div>
 
@@ -2504,7 +3053,8 @@
                                 <span id="blueActionCount">0 ACTIONS</span>
                             </div>
                             <div id="blueStreamFeed" style="display:flex;flex-direction:column;gap:4px;">
-                                <div style="color:var(--text-dim);font-style:italic;">Defense mechanisms on standby. Monitoring kernel ring buffer and log streams.</div>
+                                <div style="color:var(--text-dim);font-style:italic;">Defense mechanisms on standby.
+                                    Monitoring kernel ring buffer and log streams.</div>
                             </div>
                         </div>
                     </div>
@@ -2515,10 +3065,15 @@
             <section class="glass-panel mitre-panel" id="section-mitre" style="grid-column: span 12;">
                 <div class="panel-header">
                     <div class="panel-title">
-                        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                        <svg viewBox="0 0 24 24">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                            <line x1="3" y1="9" x2="21" y2="9" />
+                            <line x1="9" y1="21" x2="9" y2="9" />
+                        </svg>
                         MITRE ATT&CK Enterprise Matrix Coverage
                     </div>
-                    <span style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--neon-green)">10 TECHNIQUES MAPPED</span>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--neon-green)">10
+                        TECHNIQUES MAPPED</span>
                 </div>
                 <div class="panel-body">
                     <div class="mitre-grid" id="mitreGrid">
@@ -2586,7 +3141,11 @@
         <div class="modal-card">
             <div class="modal-header">
                 <div class="modal-title">
-                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                        <circle cx="12" cy="12" r="3" />
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                    </svg>
                     SYSTEM CONFIGURATION
                 </div>
                 <button class="modal-close-btn" onclick="closeSettingsModal()" aria-label="Close settings">✕</button>
@@ -2596,10 +3155,12 @@
                     <div class="setting-row">
                         <div>
                             <div class="setting-title">Safe Mode / Dry-Run Guard</div>
-                            <div class="setting-desc">Simulate response actions safely without modifying system nftables, processes, or files</div>
+                            <div class="setting-desc">Simulate response actions safely without modifying system
+                                nftables, processes, or files</div>
                         </div>
                         <label class="switch">
-                            <input type="checkbox" id="settingsSafeMode" checked onchange="toggleSafeMode(this.checked)">
+                            <input type="checkbox" id="settingsSafeMode" checked
+                                onchange="toggleSafeMode(this.checked)">
                             <span class="slider"></span>
                         </label>
                     </div>
@@ -2609,10 +3170,12 @@
                     <div class="setting-row">
                         <div>
                             <div class="setting-title">Audio Synthesizer FX</div>
-                            <div class="setting-desc">Play cyber acoustic frequency feedback for clicks, alerts, and countermeasures</div>
+                            <div class="setting-desc">Play cyber acoustic frequency feedback for clicks, alerts, and
+                                countermeasures</div>
                         </div>
                         <label class="switch">
-                            <input type="checkbox" id="settingsAudio" checked onchange="toggleAudioSetting(this.checked)">
+                            <input type="checkbox" id="settingsAudio" checked
+                                onchange="toggleAudioSetting(this.checked)">
                             <span class="slider"></span>
                         </label>
                     </div>
@@ -2626,10 +3189,14 @@
                         </div>
                     </div>
                     <div style="display:flex;gap:10px;margin-top:6px;">
-                        <button class="speed-btn" data-speed="fast" onclick="setEventSpeed('fast', this)">Fast (300ms)</button>
-                        <button class="speed-btn active" data-speed="normal" onclick="setEventSpeed('normal', this)">Normal (650ms)</button>
-                        <button class="speed-btn" data-speed="slow" onclick="setEventSpeed('slow', this)">Slow (1.8s)</button>
-                        <button class="speed-btn" data-speed="paused" onclick="setEventSpeed('paused', this)">Pause</button>
+                        <button class="speed-btn" data-speed="fast" onclick="setEventSpeed('fast', this)">Fast
+                            (300ms)</button>
+                        <button class="speed-btn active" data-speed="normal"
+                            onclick="setEventSpeed('normal', this)">Normal (650ms)</button>
+                        <button class="speed-btn" data-speed="slow" onclick="setEventSpeed('slow', this)">Slow
+                            (1.8s)</button>
+                        <button class="speed-btn" data-speed="paused"
+                            onclick="setEventSpeed('paused', this)">Pause</button>
                     </div>
                 </div>
 
@@ -2639,7 +3206,9 @@
                             <div class="setting-title">Attached eBPF Syscall Tracepoints</div>
                             <div class="setting-desc">Active kernel hooks streaming events to ring-buffer</div>
                         </div>
-                        <span style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--neon-green)">8/8 ATTACHED</span>
+                        <span
+                            style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--neon-green)">8/8
+                            ATTACHED</span>
                     </div>
                     <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
                         <span class="probe-tag">execve</span>
@@ -2659,11 +3228,13 @@
                             <div class="setting-title">Ransomware Shannon Entropy Threshold</div>
                             <div class="setting-desc">Detection threshold for encrypted file write bursts</div>
                         </div>
-                        <span id="entropyValDisplay" style="font-family:'JetBrains Mono',monospace;color:var(--neon-cyan);font-weight:700">7.50 / 8.0</span>
+                        <span id="entropyValDisplay"
+                            style="font-family:'JetBrains Mono',monospace;color:var(--neon-cyan);font-weight:700">7.50 /
+                            8.0</span>
                     </div>
-                    <input type="range" min="6.0" max="8.0" step="0.05" value="7.5" id="entropySlider" 
-                           style="width:100%;margin-top:8px;accent-color:var(--neon-cyan);" 
-                           oninput="document.getElementById('entropyValDisplay').textContent = Number(this.value).toFixed(2) + ' / 8.0'">
+                    <input type="range" min="6.0" max="8.0" step="0.05" value="7.5" id="entropySlider"
+                        style="width:100%;margin-top:8px;accent-color:var(--neon-cyan);"
+                        oninput="document.getElementById('entropyValDisplay').textContent = Number(this.value).toFixed(2) + ' / 8.0'">
                 </div>
 
                 <div class="setting-group" style="border-bottom:none;">
@@ -2687,15 +3258,22 @@
         <div class="modal-card" style="max-width: 600px;">
             <div class="modal-header">
                 <div class="modal-title">
-                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                        <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                        <polyline points="2 17 12 22 22 17" />
+                        <polyline points="2 12 12 17 22 12" />
+                    </svg>
                     CUSTOM ATTACK PAYLOAD BUILDER
                 </div>
                 <button class="modal-close-btn" onclick="closeCustomScenarioModal()">✕</button>
             </div>
             <div class="modal-body">
                 <div class="setting-group">
-                    <label style="font-family:'Orbitron',monospace;font-size:0.7rem;color:var(--neon-cyan);display:block;margin-bottom:6px;">ATTACK CATEGORY</label>
-                    <select id="customCategory" style="width:100%;padding:8px 12px;background:rgba(5,10,20,0.8);border:1px solid var(--glass-border);color:var(--text-primary);border-radius:6px;font-family:'Rajdhani',sans-serif;font-size:0.9rem;">
+                    <label
+                        style="font-family:'Orbitron',monospace;font-size:0.7rem;color:var(--neon-cyan);display:block;margin-bottom:6px;">ATTACK
+                        CATEGORY</label>
+                    <select id="customCategory"
+                        style="width:100%;padding:8px 12px;background:rgba(5,10,20,0.8);border:1px solid var(--glass-border);color:var(--text-primary);border-radius:6px;font-family:'Rajdhani',sans-serif;font-size:0.9rem;">
                         <option value="ransomware">Ransomware / File Encryption</option>
                         <option value="trojan">Trojan Dropper & C2 Reverse Shell</option>
                         <option value="privesc">Privilege Escalation / SUID Abuse</option>
@@ -2706,12 +3284,18 @@
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" class="setting-group">
                     <div>
-                        <label style="font-family:'Orbitron',monospace;font-size:0.7rem;color:var(--neon-cyan);display:block;margin-bottom:6px;">PROCESS (COMM)</label>
-                        <input id="customComm" type="text" value="dark_crypt" style="width:100%;padding:8px 12px;background:rgba(5,10,20,0.8);border:1px solid var(--glass-border);color:var(--neon-green);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;">
+                        <label
+                            style="font-family:'Orbitron',monospace;font-size:0.7rem;color:var(--neon-cyan);display:block;margin-bottom:6px;">PROCESS
+                            (COMM)</label>
+                        <input id="customComm" type="text" value="dark_crypt"
+                            style="width:100%;padding:8px 12px;background:rgba(5,10,20,0.8);border:1px solid var(--glass-border);color:var(--neon-green);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;">
                     </div>
                     <div>
-                        <label style="font-family:'Orbitron',monospace;font-size:0.7rem;color:var(--neon-cyan);display:block;margin-bottom:6px;">SYSCALL HOOK</label>
-                        <select id="customSyscall" style="width:100%;padding:8px 12px;background:rgba(5,10,20,0.8);border:1px solid var(--glass-border);color:var(--neon-cyan);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;">
+                        <label
+                            style="font-family:'Orbitron',monospace;font-size:0.7rem;color:var(--neon-cyan);display:block;margin-bottom:6px;">SYSCALL
+                            HOOK</label>
+                        <select id="customSyscall"
+                            style="width:100%;padding:8px 12px;background:rgba(5,10,20,0.8);border:1px solid var(--glass-border);color:var(--neon-cyan);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;">
                             <option value="rename">rename (file extension change)</option>
                             <option value="openat">openat (file read/write/canary)</option>
                             <option value="execve">execve (process execution)</option>
@@ -2722,21 +3306,34 @@
                     </div>
                 </div>
                 <div class="setting-group">
-                    <label style="font-family:'Orbitron',monospace;font-size:0.7rem;color:var(--neon-cyan);display:block;margin-bottom:6px;">TARGET PATH OR DESTINATION IP</label>
-                    <input id="customTarget" type="text" value="/home/finance/ledger_2026.xlsx -> ledger_2026.xlsx.ENCRYPTED" style="width:100%;padding:8px 12px;background:rgba(5,10,20,0.8);border:1px solid var(--glass-border);color:var(--text-primary);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;">
+                    <label
+                        style="font-family:'Orbitron',monospace;font-size:0.7rem;color:var(--neon-cyan);display:block;margin-bottom:6px;">TARGET
+                        PATH OR DESTINATION IP</label>
+                    <input id="customTarget" type="text"
+                        value="/home/finance/ledger_2026.xlsx -> ledger_2026.xlsx.ENCRYPTED"
+                        style="width:100%;padding:8px 12px;background:rgba(5,10,20,0.8);border:1px solid var(--glass-border);color:var(--text-primary);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;">
                 </div>
                 <div class="setting-group" style="border-bottom:none;">
-                    <label style="font-family:'Orbitron',monospace;font-size:0.7rem;color:var(--neon-cyan);display:block;margin-bottom:6px;">ATTACK SEVERITY LEVEL</label>
+                    <label
+                        style="font-family:'Orbitron',monospace;font-size:0.7rem;color:var(--neon-cyan);display:block;margin-bottom:6px;">ATTACK
+                        SEVERITY LEVEL</label>
                     <div style="display:flex;gap:14px;">
-                        <label style="color:var(--severity-critical);display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="radio" name="customSev" value="critical" checked> Critical</label>
-                        <label style="color:var(--severity-high);display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="radio" name="customSev" value="high"> High</label>
-                        <label style="color:var(--severity-medium);display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="radio" name="customSev" value="medium"> Medium</label>
+                        <label
+                            style="color:var(--severity-critical);display:flex;align-items:center;gap:6px;cursor:pointer;"><input
+                                type="radio" name="customSev" value="critical" checked> Critical</label>
+                        <label
+                            style="color:var(--severity-high);display:flex;align-items:center;gap:6px;cursor:pointer;"><input
+                                type="radio" name="customSev" value="high"> High</label>
+                        <label
+                            style="color:var(--severity-medium);display:flex;align-items:center;gap:6px;cursor:pointer;"><input
+                                type="radio" name="customSev" value="medium"> Medium</label>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="modal-btn" onclick="closeCustomScenarioModal()">CANCEL</button>
-                <button class="modal-btn primary" onclick="injectCustomScenario()">⚡ INJECT PAYLOAD & TEST DEFENSE</button>
+                <button class="modal-btn primary" onclick="injectCustomScenario()">⚡ INJECT PAYLOAD & TEST
+                    DEFENSE</button>
             </div>
         </div>
     </div>
@@ -2746,12 +3343,18 @@
         <div class="modal-card" style="max-width: 720px; max-height: 85vh;">
             <div class="modal-header">
                 <div class="modal-title">
-                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                    </svg>
                     SIMULATION FORENSIC INCIDENT REPORT
                 </div>
                 <button class="modal-close-btn" onclick="closeForensicReportModal()">✕</button>
             </div>
-            <div class="modal-body" id="forensicReportContent" style="font-family:'Rajdhani',sans-serif;line-height:1.6;max-height:55vh;overflow-y:auto;padding-right:12px;">
+            <div class="modal-body" id="forensicReportContent"
+                style="font-family:'Rajdhani',sans-serif;line-height:1.6;max-height:55vh;overflow-y:auto;padding-right:12px;">
                 <!-- Dynamically generated report -->
             </div>
             <div class="modal-footer">
@@ -2888,10 +3491,10 @@
         // ================================================================
         // SIMULATED EVENT GENERATOR
         // ================================================================
-        const SYSCALLS = ['execve','openat','connect','rename','unlink','bind','setuid','setgid'];
-        const COMMS = ['bash','sshd','nginx','node','python3','curl','wget','apt','dpkg','cron','systemd','rsyslog','auditd'];
-        const PATHS = ['/usr/bin/bash','/usr/sbin/sshd','/usr/bin/curl','/tmp/payload','/usr/bin/python3','/usr/sbin/nginx','/dev/shm/dropper','/usr/bin/nmap'];
-        const FILE_PATHS = ['/etc/passwd','/etc/shadow','/etc/ssh/sshd_config','/var/log/syslog','/tmp/data.txt','/home/user/.bashrc'];
+        const SYSCALLS = ['execve', 'openat', 'connect', 'rename', 'unlink', 'bind', 'setuid', 'setgid'];
+        const COMMS = ['bash', 'sshd', 'nginx', 'node', 'python3', 'curl', 'wget', 'apt', 'dpkg', 'cron', 'systemd', 'rsyslog', 'auditd'];
+        const PATHS = ['/usr/bin/bash', '/usr/sbin/sshd', '/usr/bin/curl', '/tmp/payload', '/usr/bin/python3', '/usr/sbin/nginx', '/dev/shm/dropper', '/usr/bin/nmap'];
+        const FILE_PATHS = ['/etc/passwd', '/etc/shadow', '/etc/ssh/sshd_config', '/var/log/syslog', '/tmp/data.txt', '/home/user/.bashrc'];
 
         function randomFrom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
         function randomPID() { return Math.floor(Math.random() * 30000) + 100; }
@@ -2907,8 +3510,8 @@
             let status = 'ok';
 
             if (['execve'].includes(syscall)) path = randomFrom(PATHS);
-            else if (['openat','unlink','rename'].includes(syscall)) path = randomFrom(FILE_PATHS);
-            else if (['connect','bind'].includes(syscall)) path = `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}:${[22,80,443,4444,8080,3306][Math.floor(Math.random()*6)]}`;
+            else if (['openat', 'unlink', 'rename'].includes(syscall)) path = randomFrom(FILE_PATHS);
+            else if (['connect', 'bind'].includes(syscall)) path = `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}:${[22, 80, 443, 4444, 8080, 3306][Math.floor(Math.random() * 6)]}`;
 
             if (path.includes('/tmp/') || path.includes('/dev/shm')) status = 'warn';
             if (Math.random() < 0.08) status = 'fail';
@@ -3161,7 +3764,7 @@
         // AUDIO SYNTHESIZER (WEB AUDIO API)
         // ================================================================
         let audioEnabled = true;
-        window.toggleAudioSetting = function(val) {
+        window.toggleAudioSetting = function (val) {
             audioEnabled = val;
             showToast(audioEnabled ? '🔊 Audio effects enabled' : '🔇 Audio muted', 'info');
         };
@@ -3210,7 +3813,7 @@
         // ================================================================
         // SIDEBAR NAVIGATION & SCROLLSPY
         // ================================================================
-        window.navigateTo = function(targetId, btn) {
+        window.navigateTo = function (targetId, btn) {
             playCyberTone('nav');
 
             // Update active state in sidebar
@@ -3268,12 +3871,12 @@
         }, { passive: true });
 
         // Sidebar Expand / Collapse
-        window.toggleSidebarCollapse = function() {
+        window.toggleSidebarCollapse = function () {
             playCyberTone('blip');
             const sidebar = document.getElementById('sidebar');
             if (!sidebar) return;
             const isExpanded = sidebar.classList.toggle('expanded');
-            
+
             const toggleBtn = document.getElementById('sidebarToggle');
             if (toggleBtn) {
                 toggleBtn.setAttribute('title', isExpanded ? 'Collapse Sidebar' : 'Expand Sidebar');
@@ -3282,11 +3885,11 @@
 
             try {
                 localStorage.setItem('klcds_sidebar_expanded', isExpanded ? '1' : '0');
-            } catch (e) {}
+            } catch (e) { }
         };
 
         // Mobile Sidebar Drawer
-        window.toggleMobileSidebar = function() {
+        window.toggleMobileSidebar = function () {
             playCyberTone('blip');
             const sidebar = document.getElementById('sidebar');
             const backdrop = document.getElementById('sidebarBackdrop');
@@ -3294,7 +3897,7 @@
             if (backdrop) backdrop.classList.toggle('active', isOpen);
         };
 
-        window.closeMobileSidebar = function() {
+        window.closeMobileSidebar = function () {
             const sidebar = document.getElementById('sidebar');
             const backdrop = document.getElementById('sidebarBackdrop');
             if (sidebar) sidebar.classList.remove('mobile-open');
@@ -3304,7 +3907,7 @@
         // ================================================================
         // SETTINGS MODAL
         // ================================================================
-        window.openSettingsModal = function() {
+        window.openSettingsModal = function () {
             playCyberTone('blip');
             closeMobileSidebar();
             const modal = document.getElementById('settingsModal');
@@ -3314,7 +3917,7 @@
             }
         };
 
-        window.closeSettingsModal = function() {
+        window.closeSettingsModal = function () {
             playCyberTone('blip');
             const modal = document.getElementById('settingsModal');
             if (modal) {
@@ -3323,14 +3926,14 @@
             }
         };
 
-        window.handleModalBackdropClick = function(event) {
+        window.handleModalBackdropClick = function (event) {
             if (event.target && event.target.id === 'settingsModal') {
                 closeSettingsModal();
             }
         };
 
         // Event Speed Control from Settings
-        window.setEventSpeed = function(speed, btn) {
+        window.setEventSpeed = function (speed, btn) {
             playCyberTone('blip');
             document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
@@ -3354,7 +3957,7 @@
         };
 
         // Reset Simulation Feed
-        window.resetSimulationFeed = function() {
+        window.resetSimulationFeed = function () {
             playCyberTone('alert');
             const feed = document.getElementById('eventFeed');
             if (feed) feed.innerHTML = '';
@@ -3397,7 +4000,7 @@
         // ================================================================
         // SAFE MODE TOGGLE (SYNCED)
         // ================================================================
-        window.toggleSafeMode = function(explicitVal) {
+        window.toggleSafeMode = function (explicitVal) {
             playCyberTone('blip');
             const badge = document.getElementById('safeModeBadge');
             const text = document.getElementById('safeModeText');
@@ -3426,7 +4029,7 @@
         };
 
         // Backward-compatible alias for any legacy inline calls
-        window.setActiveNav = function(btn) {
+        window.setActiveNav = function (btn) {
             const target = btn.getAttribute('data-target') || 'section-dashboard';
             window.navigateTo(target, btn);
         };
@@ -3434,7 +4037,7 @@
         // ================================================================
         // TOAST NOTIFICATIONS
         // ================================================================
-        window.showToast = function(message, type = 'info') {
+        window.showToast = function (message, type = 'info') {
             const container = document.getElementById('toastContainer');
             const icons = { critical: '🚨', high: '⚠️', success: '✅', info: 'ℹ️' };
             const toast = document.createElement('div');
@@ -3458,7 +4061,7 @@
         let lastSimulationResult = null;
         let activeKillChainTimer = null;
 
-        window.setSimSpeed = function(multiplier, btn) {
+        window.setSimSpeed = function (multiplier, btn) {
             playCyberTone('blip');
             simSpeedMultiplier = multiplier;
             document.querySelectorAll('.sim-toolbar .speed-btn').forEach(b => b.classList.remove('active'));
@@ -3687,7 +4290,7 @@
         };
 
         // Run scenario function
-        window.runSimulation = function(type, e) {
+        window.runSimulation = function (type, e) {
             const btn = (e && e.currentTarget) || (window.event && window.event.currentTarget);
             if (btn && btn.classList.contains('running')) return;
             if (btn) btn.classList.add('running');
@@ -3833,7 +4436,7 @@
             }
         }
 
-        window.showMitreDetails = function(techId) {
+        window.showMitreDetails = function (techId) {
             playCyberTone('blip');
             const descriptions = {
                 'T1486': 'Data Encrypted for Impact: Adversaries encrypt system data on target computers to interrupt access. Mitigated by KLCDS Canary Decoys and Shannon Entropy Thresholding.',
@@ -3851,7 +4454,7 @@
         };
 
         // Reset All Feeds
-        window.resetSimulationFeed = function() {
+        window.resetSimulationFeed = function () {
             playCyberTone('alert');
             const feed = document.getElementById('eventFeed');
             if (feed) feed.innerHTML = '';
@@ -3904,23 +4507,23 @@
         };
 
         // Custom Payload Builder Modal
-        window.openCustomScenarioModal = function() {
+        window.openCustomScenarioModal = function () {
             playCyberTone('blip');
             const modal = document.getElementById('customScenarioModal');
             if (modal) modal.classList.add('active');
         };
 
-        window.closeCustomScenarioModal = function() {
+        window.closeCustomScenarioModal = function () {
             playCyberTone('blip');
             const modal = document.getElementById('customScenarioModal');
             if (modal) modal.classList.remove('active');
         };
 
-        window.handleCustomModalBackdrop = function(e) {
+        window.handleCustomModalBackdrop = function (e) {
             if (e.target && e.target.id === 'customScenarioModal') closeCustomScenarioModal();
         };
 
-        window.injectCustomScenario = function() {
+        window.injectCustomScenario = function () {
             playCyberTone('alert');
             const comm = document.getElementById('customComm').value || 'custom_payload';
             const syscall = document.getElementById('customSyscall').value || 'execve';
@@ -3963,7 +4566,7 @@
         };
 
         // Forensic Incident Report Modal & Download
-        window.openForensicReportModal = function() {
+        window.openForensicReportModal = function () {
             playCyberTone('blip');
             const modal = document.getElementById('forensicReportModal');
             const content = document.getElementById('forensicReportContent');
@@ -4016,17 +4619,17 @@
             if (modal) modal.classList.add('active');
         };
 
-        window.closeForensicReportModal = function() {
+        window.closeForensicReportModal = function () {
             playCyberTone('blip');
             const modal = document.getElementById('forensicReportModal');
             if (modal) modal.classList.remove('active');
         };
 
-        window.handleReportModalBackdrop = function(e) {
+        window.handleReportModalBackdrop = function (e) {
             if (e.target && e.target.id === 'forensicReportModal') closeForensicReportModal();
         };
 
-        window.downloadForensicReport = function() {
+        window.downloadForensicReport = function () {
             playCyberTone('blip');
             const sim = lastSimulationResult || SCENARIOS.ransomware;
             const now = new Date().toISOString();
@@ -4084,13 +4687,13 @@
                                 status: data.event.return_code === 0 ? 'ok' : 'fail'
                             });
                         }
-                    } catch (err) {}
+                    } catch (err) { }
                 };
 
                 ws.onerror = () => {
                     // Fall back to client simulation engine gracefully
                 };
-            } catch (err) {}
+            } catch (err) { }
         }
         setTimeout(initWebSocket, 800);
 
@@ -4131,8 +4734,9 @@
                         toggle.setAttribute('aria-expanded', 'true');
                     }
                 }
-            } catch (e) {}
+            } catch (e) { }
         });
     </script>
 </body>
+
 </html>

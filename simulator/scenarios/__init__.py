@@ -5,7 +5,7 @@ simulator.scenarios — Registry of cybersecurity attack & defense simulations
 
 from __future__ import annotations
 
-from typing import Type
+from typing import Any, Type
 
 from simulator.scenarios.base import BaseScenario
 from simulator.scenarios.bruteforce import BruteForceScenario
@@ -37,7 +37,7 @@ def get_scenario(scenario_id: str) -> BaseScenario:
     return cls()
 
 
-def list_available_scenarios() -> list[dict]:
+def list_available_scenarios() -> list[dict[str, Any]]:
     """Return metadata dicts for all available scenarios."""
     scenarios = []
     for cls in SCENARIO_CLASSES.values():
